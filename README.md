@@ -1,18 +1,17 @@
-# School System
- OOP Finals - Group 5
+# Grade Management System
 
-Need to implement
+OOP Finals - Group 5 - School System
 
+## Need to implements
 
-[Admin]
--Can changes students and teachers password
--Can view everything
--Can search, add and remove student and teacher info in database
+Admin 
+- Can changes students and teachers password
+- Can view everything
+- Can search, add and remove student and teacher info in database
 
-[Teacher]
--can edit and input student grades
--can view and search student 
+Teacher
+- Can edit and input student grades
+- Can view and search student list
 
-[Student]
--can only view the grades
-
+Student
+- Can only view the grades
