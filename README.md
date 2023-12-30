@@ -2,17 +2,17 @@
  OOP Finals - Group 5
 
 Need to implement
-3 Accounts
 
->Admin<
+
+[Admin]
 -Can changes students and teachers password
 -Can view everything
 -Can search, add and remove student and teacher info in database
 
->Teacher<
+[Teacher]
 -can edit and input student grades
 -can view and search student 
 
->Student<
+[Student]
 -can only view the grades
 
