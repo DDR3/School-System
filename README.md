@@ -15,3 +15,6 @@ Teacher
 
 Student
 - Can only view the grades
+
+## Current Progress
+<img height="400" src="https://raw.githubusercontent.com/DDR3/School-System/main/Screenshots/LoginUI.png"  />
