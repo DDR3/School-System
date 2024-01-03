@@ -2,6 +2,11 @@
 
 OOP Finals - Group 5 - School System
 
+Application used
+- GitHub Desktop
+- VS Ccode | Netbeans
+- XAMPP | mySQL
+
 ## Need to implements
 
 Admin 
