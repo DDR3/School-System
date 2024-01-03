@@ -1,16 +1,41 @@
 package GUI;
 
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginUI extends javax.swing.JFrame {
 
     /**
      * Creates new form LoginUI
      */
-    public LoginUI() {
+    public LoginUI() throws ClassNotFoundException {
         initComponents();
+        sqlConnection();
     }
 
+    final String url = "jdbc:mysql://localhost:3306/schooldb";
+    final String sqlDriver = "com.mysql.cj.jdbc.Driver";
+    final String sqlUser = "root";
+    final String sqlPass = "@mySQL36";
+    
+    Connection connect;
+    PreparedStatement prestate;
+            
+    public void sqlConnection() throws ClassNotFoundException {
+        try {
+            Class.forName(sqlDriver);
+            Connection connect = DriverManager.getConnection(url, sqlUser, sqlPass);
+            Statement statement = connect.createStatement();
+            if (connect != null) {
+                System.out.println("mySQL Connected");
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,9 +53,6 @@ public class LoginUI extends javax.swing.JFrame {
         btnLogin = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         showPassword = new javax.swing.JCheckBox();
-        teacherCheckbox = new javax.swing.JCheckBox();
-        adminCheckbox = new javax.swing.JCheckBox();
-        studentCheckbox = new javax.swing.JCheckBox();
         leftPanel = new javax.swing.JPanel();
         logo = new javax.swing.JLabel();
         schoolName = new javax.swing.JLabel();
@@ -39,6 +61,7 @@ public class LoginUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         welcome.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        welcome.setForeground(new java.awt.Color(102, 102, 255));
         welcome.setText("Welcome!");
 
         labeluserID.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
@@ -74,30 +97,6 @@ public class LoginUI extends javax.swing.JFrame {
         showPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 showPasswordActionPerformed(evt);
-            }
-        });
-
-        teacherCheckbox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        teacherCheckbox.setText("Teacher");
-        teacherCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                teacherCheckboxActionPerformed(evt);
-            }
-        });
-
-        adminCheckbox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        adminCheckbox.setText("Admin");
-        adminCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminCheckboxActionPerformed(evt);
-            }
-        });
-
-        studentCheckbox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        studentCheckbox.setText("Student");
-        studentCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                studentCheckboxActionPerformed(evt);
             }
         });
 
@@ -149,42 +148,31 @@ public class LoginUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addComponent(welcome))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labeluserID)
                             .addComponent(labelPassword)
                             .addComponent(showPassword)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(adminCheckbox)
-                                    .addGap(30, 30, 30)
-                                    .addComponent(teacherCheckbox)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                                    .addComponent(studentCheckbox))
                                 .addComponent(userID, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(password, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(45, Short.MAX_VALUE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(41, 41, 41))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(welcome)
+                        .addGap(89, 89, 89))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addGap(53, 53, 53)
                 .addComponent(welcome)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(adminCheckbox)
-                    .addComponent(teacherCheckbox)
-                    .addComponent(studentCheckbox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGap(30, 30, 30)
                 .addComponent(labeluserID)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(userID, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -198,7 +186,7 @@ public class LoginUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50))
+                .addContainerGap(82, Short.MAX_VALUE))
             .addComponent(leftPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -217,19 +205,38 @@ public class LoginUI extends javax.swing.JFrame {
     }//GEN-LAST:event_userIDActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-         //If userID and Password is Empty        
+
+       //If userID and Password is Empty        
        if (userID.getText().equals("") && password.getText().equals("") ) {
-           JOptionPane.showMessageDialog(null, "Please fill out both!");
+           JOptionPane.showMessageDialog(null, "User ID and Password are Required!");
        } // if userID is Empty
        else if (userID.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please fill out user id!");
+            JOptionPane.showMessageDialog(null, "User ID Required!");
        } // if Password is Empty
        else if (password.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please fill out password!");
-       } // if userID is not a number
-       else if(!userID.getText().matches("[0-9]")) {
-           JOptionPane.showMessageDialog(null, "Please enter only numbers in the user id!");
-       } 
+            JOptionPane.showMessageDialog(null, "Password Required!");
+       } else {
+           String queryLogin = "SELECT * FROM admin_info WHERE admin_id = ? AND password = ?";     
+           try {
+                connect = DriverManager.getConnection(url, sqlUser, sqlPass);
+                prestate = connect.prepareStatement(queryLogin);
+                prestate.setString(1, userID.getText()); 
+                prestate.setString(2, password.getText());
+                ResultSet result = prestate.executeQuery();
+                if (!result.next()) {
+                    JOptionPane.showMessageDialog(null, "Invalid User ID and Password");
+                     userID.setText("");
+                     password.setText("");
+                } else {
+                     JOptionPane.showMessageDialog(null, "Login Successfully");
+                     AdminUI admin = new AdminUI();
+                     admin.setVisible(true);
+                     this.dispose();
+                }
+           } catch (SQLException ex) {
+               Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
+           }
+       }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void showPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPasswordActionPerformed
@@ -240,18 +247,6 @@ public class LoginUI extends javax.swing.JFrame {
              password.setEchoChar('*');
         }
     }//GEN-LAST:event_showPasswordActionPerformed
-
-    private void teacherCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_teacherCheckboxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_teacherCheckboxActionPerformed
-
-    private void adminCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminCheckboxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_adminCheckboxActionPerformed
-
-    private void studentCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentCheckboxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_studentCheckboxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,13 +279,16 @@ public class LoginUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new LoginUI().setVisible(true);
+                try {
+                    new LoginUI().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox adminCheckbox;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnLogin;
     private javax.swing.JLabel labelPassword;
@@ -301,8 +299,6 @@ public class LoginUI extends javax.swing.JFrame {
     private javax.swing.JPasswordField password;
     private javax.swing.JLabel schoolName;
     private javax.swing.JCheckBox showPassword;
-    private javax.swing.JCheckBox studentCheckbox;
-    private javax.swing.JCheckBox teacherCheckbox;
     private javax.swing.JTextField userID;
     private javax.swing.JLabel welcome;
     // End of variables declaration//GEN-END:variables
