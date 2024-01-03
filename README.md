@@ -4,7 +4,7 @@ OOP Finals - Group 5 - School System
 
 Application used
 - [GitHub Desktop](https://desktop.github.com/)
-- [VS Ccode](https://code.visualstudio.com/download) | [Netbeans](https://netbeans.apache.org/front/main/download/nb20/)
+- [Visual Studio Code](https://code.visualstudio.com/download) | [Netbeans](https://netbeans.apache.org/front/main/download/nb20/)
 - [XAMPP](https://www.apachefriends.org/download.html) | [mySQL](https://dev.mysql.com/downloads/installer/)
   
 ## Need to implements
