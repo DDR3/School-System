@@ -29,10 +29,11 @@ public class LoginUI extends javax.swing.JFrame {
             Connection connect = DriverManager.getConnection(url, sqlUser, sqlPass);
             Statement statement = connect.createStatement();
             if (connect != null) {
-                System.out.println("mySQL Connected");
+                System.out.println("Database Connected!");
             } 
         } catch (SQLException ex) {
             Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Database Offline!");
         }
     }
     
@@ -152,10 +153,10 @@ public class LoginUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labeluserID)
                             .addComponent(labelPassword)
                             .addComponent(showPassword)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(labeluserID, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(userID, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(password, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -215,35 +216,61 @@ public class LoginUI extends javax.swing.JFrame {
        } // if Password is Empty
        else if (password.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Password Required!");
-       } else {
-           String queryLogin = "SELECT * FROM admin_info WHERE admin_id = ? AND password = ?";     
-           try {
+       } else { 
+           try { // if Admin
+                String queryLogin = "SELECT * FROM admin_info WHERE admin_id = ? AND password = ?";    
                 connect = DriverManager.getConnection(url, sqlUser, sqlPass);
                 prestate = connect.prepareStatement(queryLogin);
                 prestate.setString(1, userID.getText()); 
                 prestate.setString(2, password.getText());
                 ResultSet result = prestate.executeQuery();
-                if (!result.next()) {
-                    JOptionPane.showMessageDialog(null, "Invalid User ID and Password");
-                     userID.setText("");
-                     password.setText("");
-                } else {
-                     JOptionPane.showMessageDialog(null, "Login Successfully");
+                if (result.next()) {
+                 JOptionPane.showMessageDialog(null, "Login Successfully!");
                      AdminUI admin = new AdminUI();
                      admin.setVisible(true);
                      this.dispose();
-                }
-           } catch (SQLException ex) {
+                } else {   // if Teacher
+                  queryLogin = "SELECT * FROM teacher_info WHERE teacher_id = ? AND password = ?";  
+                  connect = DriverManager.getConnection(url,sqlUser, sqlPass);
+                  prestate = connect.prepareStatement(queryLogin);
+                  prestate.setString(1, userID.getText()); 
+                  prestate.setString(2, password.getText());
+                  result = prestate.executeQuery();
+                  if (result.next()) {
+                  JOptionPane.showMessageDialog(null, "Login Successfully!");
+                     TeacherUI teacher = new TeacherUI();
+                     teacher.setVisible(true);
+                     this.dispose();
+                } else {  // if Student
+                  queryLogin = "SELECT * FROM student_info WHERE student_id = ? AND password = ?";  
+                  connect = DriverManager.getConnection(url,sqlUser, sqlPass);
+                  prestate = connect.prepareStatement(queryLogin);
+                  prestate.setString(1, userID.getText()); 
+                  prestate.setString(2, password.getText());
+                  result = prestate.executeQuery();
+                  if (result.next()) {
+                  JOptionPane.showMessageDialog(null, "Login Successfully!");
+                     StudentUI student = new StudentUI();
+                     student.setVisible(true);
+                     this.dispose();
+                } else { // if user ID and Password does not match in the database
+                     JOptionPane.showMessageDialog(null, "Invalid User ID or Password!");
+                        userID.setText("");
+                        password.setText("");
+                  }
+              } 
+           } 
+         }  catch (SQLException ex) {
                Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
-           }
+           }             
        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void showPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPasswordActionPerformed
-        //enable and disable show password
+        //enable show password
         if (showPassword.isSelected()) {
             password.setEchoChar((char)0);
-        } else {
+        } else { //disable show password
              password.setEchoChar('*');
         }
     }//GEN-LAST:event_showPasswordActionPerformed
