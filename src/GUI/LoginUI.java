@@ -22,14 +22,16 @@ public class LoginUI extends javax.swing.JFrame {
     
     Connection connect;
     PreparedStatement prestate;
+    Statement statement;
+    ResultSet result;
             
     public void sqlConnection() throws ClassNotFoundException {
-        try {
+        try { 
             Class.forName(sqlDriver);
-            Connection connect = DriverManager.getConnection(url, sqlUser, sqlPass);
-            Statement statement = connect.createStatement();
+            connect = DriverManager.getConnection(url, sqlUser, sqlPass);
+            statement = connect.createStatement();
             if (connect != null) {
-                System.out.println("Database Connected!");
+                System.out.println("Database Connected");
             } 
         } catch (SQLException ex) {
             Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -219,11 +221,10 @@ public class LoginUI extends javax.swing.JFrame {
        } else { 
            try { // if Admin
                 String queryLogin = "SELECT * FROM admin_info WHERE admin_id = ? AND password = ?";    
-                connect = DriverManager.getConnection(url, sqlUser, sqlPass);
                 prestate = connect.prepareStatement(queryLogin);
                 prestate.setString(1, userID.getText()); 
                 prestate.setString(2, password.getText());
-                ResultSet result = prestate.executeQuery();
+                result = prestate.executeQuery();
                 if (result.next()) {
                  JOptionPane.showMessageDialog(null, "Login Successfully!");
                      AdminUI admin = new AdminUI();
@@ -231,7 +232,6 @@ public class LoginUI extends javax.swing.JFrame {
                      this.dispose();
                 } else {   // if Teacher
                   queryLogin = "SELECT * FROM teacher_info WHERE teacher_id = ? AND password = ?";  
-                  connect = DriverManager.getConnection(url,sqlUser, sqlPass);
                   prestate = connect.prepareStatement(queryLogin);
                   prestate.setString(1, userID.getText()); 
                   prestate.setString(2, password.getText());
@@ -243,7 +243,6 @@ public class LoginUI extends javax.swing.JFrame {
                      this.dispose();
                 } else {  // if Student
                   queryLogin = "SELECT * FROM student_info WHERE student_id = ? AND password = ?";  
-                  connect = DriverManager.getConnection(url,sqlUser, sqlPass);
                   prestate = connect.prepareStatement(queryLogin);
                   prestate.setString(1, userID.getText()); 
                   prestate.setString(2, password.getText());
@@ -260,7 +259,7 @@ public class LoginUI extends javax.swing.JFrame {
                   }
               } 
            } 
-         }  catch (SQLException ex) {
+         }  catch (SQLException ex) { // Exception for SQL
                Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
            }             
        }
