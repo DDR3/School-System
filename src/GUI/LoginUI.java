@@ -12,7 +12,7 @@ public class LoginUI extends javax.swing.JFrame {
      */
     public LoginUI() throws ClassNotFoundException {
         initComponents();
-        sqlConnection();
+        connectDB();
     }
 
     final String url = "jdbc:mysql://localhost:3306/schooldb";
@@ -25,7 +25,7 @@ public class LoginUI extends javax.swing.JFrame {
     Statement statement;
     ResultSet result;
             
-    public void sqlConnection() throws ClassNotFoundException {
+    public void connectDB() throws ClassNotFoundException {
         try { 
             Class.forName(sqlDriver);
             connect = DriverManager.getConnection(url, sqlUser, sqlPass);

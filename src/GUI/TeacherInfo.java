@@ -39,7 +39,7 @@ public class TeacherInfo extends javax.swing.JFrame {
     DefaultTableModel table;
     
     public void connectDB() {
-           try { // Automatically connected to database after the teacher info was click 
+        try { // Automatically connected to database after the teacher info was click 
             Class.forName(sqlDriver);
             connect = DriverManager.getConnection(url, sqlUser, sqlPass);
             statement = connect.createStatement();
@@ -97,8 +97,23 @@ public class TeacherInfo extends javax.swing.JFrame {
             new String [] {
                 "teacher_id", "first_name", "last_name", "password"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        teacherTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(teacherTable);
+        if (teacherTable.getColumnModel().getColumnCount() > 0) {
+            teacherTable.getColumnModel().getColumn(0).setResizable(false);
+            teacherTable.getColumnModel().getColumn(1).setResizable(false);
+            teacherTable.getColumnModel().getColumn(2).setResizable(false);
+            teacherTable.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         btnClose.setBackground(new java.awt.Color(255, 204, 204));
         btnClose.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
