@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import javax.swing.table.DefaultTableModel;
 import javax.swing.*;
 import java.sql.*;
 import java.util.logging.Level;
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
  */
 public class StudentUI extends javax.swing.JFrame {
     private String studentID;
+    private DefaultTableModel tableModel;
     
     /**
      * Creates new form StudentUI
@@ -62,6 +64,35 @@ public class StudentUI extends javax.swing.JFrame {
             label1.setText(labelText.toString());
             label2.setText(section);
             
+            String queryGrades = "SELECT DISTINCT g.subject_id, s.subject_name, g.grade " +
+                    "FROM `grades` g " +
+                    "JOIN `subjects` s ON g.subject_id = s.subject_id " +
+                    "WHERE g.student_id = ?";
+
+            tableModel = new DefaultTableModel(new Object[][]{}, new String[]{"SUBJECTS", "GRADES"});
+
+            prestate = connect.prepareStatement(queryGrades);
+            prestate.setString(1, studentID);
+            result = prestate.executeQuery();
+
+            while (result.next()) {
+                String subjectName = result.getString("subject_name");
+                String grade = result.getString("grade");
+                tableModel.addRow(new Object[]{subjectName, grade});
+            }
+
+            label4.setModel(tableModel);
+
+            // Make the table non-editable
+            label4.setEnabled(false);
+            label4.setFocusable(false);
+            label4.setRowSelectionAllowed(false);
+            label4.setColumnSelectionAllowed(false);
+            // Adjust column width
+            label4.getColumnModel().getColumn(0).setPreferredWidth(300); // Adjust width for subjects
+            label4.getColumnModel().getColumn(1).setPreferredWidth(100); // Adjust width for grades
+
+            
         } catch (SQLException ex) { // Exception for SQL
             Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Database Offline!");
@@ -80,26 +111,22 @@ public class StudentUI extends javax.swing.JFrame {
     private void initComponents() {
 
         logo = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         label1 = new java.awt.Label();
         jLabel5 = new javax.swing.JLabel();
         label2 = new java.awt.Label();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        label4 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(737, 600));
+        setResizable(false);
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/School Icon/StoreLogo.scale-300.png"))); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Subjects");
-
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Student Name:");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText("Grades");
 
         label1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
@@ -108,13 +135,55 @@ public class StudentUI extends javax.swing.JFrame {
 
         label2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
+        label4.setBackground(new java.awt.Color(242, 242, 242));
+        label4.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        label4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "SUBJECTS", "GRADES"
+            }
+        ));
+        label4.setGridColor(new java.awt.Color(0, 0, 0));
+        label4.setRowHeight(30);
+        label4.setSelectionBackground(new java.awt.Color(242, 242, 242));
+        label4.setShowGrid(true);
+        label4.setShowHorizontalLines(false);
+        label4.setShowVerticalLines(false);
+        label4.getTableHeader().setResizingAllowed(false);
+        label4.getTableHeader().setReorderingAllowed(false);
+        label4.setUpdateSelectionOnSort(false);
+        label4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                label4MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(label4);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSeparator1))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(logo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -122,18 +191,17 @@ public class StudentUI extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(16, 16, 16)
-                        .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(label2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(259, 259, 259)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 264, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(93, 93, 93))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1)
+                    .addComponent(jScrollPane1)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,16 +218,18 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1))
-                .addGap(0, 242, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                .addGap(12, 12, 12))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void label4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_label4MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_label4MouseClicked
 
     /**
      * @param args the command line arguments
@@ -197,13 +267,13 @@ public class StudentUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private java.awt.Label label1;
     private java.awt.Label label2;
+    private javax.swing.JTable label4;
     private javax.swing.JLabel logo;
     // End of variables declaration//GEN-END:variables
 }
