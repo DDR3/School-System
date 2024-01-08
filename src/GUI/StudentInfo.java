@@ -16,12 +16,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author NGR
  */
-public class TeacherInfo extends javax.swing.JFrame {
+public class StudentInfo extends javax.swing.JFrame {
 
     /**
      * Creates new form TeacherInfo
      */
-    public TeacherInfo() {
+    public StudentInfo() {
         initComponents();
         connectDB();
     }
@@ -42,20 +42,20 @@ public class TeacherInfo extends javax.swing.JFrame {
             Class.forName(sqlDriver);
             connect = DriverManager.getConnection(url, sqlUser, sqlPass);
             statement = connect.createStatement();
-            String queryTeacherInfo = "SELECT * FROM teacher_info";
+            String queryTeacherInfo = "SELECT * FROM student_info";
             result = statement.executeQuery(queryTeacherInfo);
             table = (DefaultTableModel)teacherTable.getModel();
             if (connect != null) {
                 System.out.println("Database Connected");
             }     
             while(result.next()) {
-                table.addRow(new String[]{result.getString("teacher_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
+                table.addRow(new String[]{result.getString("student_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
             }        
         } catch (SQLException ex) { // Exception for SQL
             Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Database Offline!");
         } catch (ClassNotFoundException ex) { //Exception for Class.forName()
-            Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -82,12 +82,11 @@ public class TeacherInfo extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
-        teacherID = new javax.swing.JTextField();
+        studentID = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         tfirstName = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
-        btnEdit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -96,7 +95,7 @@ public class TeacherInfo extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Teacher ID", "First Name", "Last Name", "Password"
+                "Student ID", "First Name", "Last Name", "Password"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -118,7 +117,7 @@ public class TeacherInfo extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 42)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 255));
-        jLabel1.setText("Teacher Information");
+        jLabel1.setText("Student Information");
 
         searchLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         searchLabel.setForeground(new java.awt.Color(102, 102, 255));
@@ -129,15 +128,15 @@ public class TeacherInfo extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 255));
-        jLabel2.setText("Add Teacher");
+        jLabel2.setText("Add Student");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText("Teacher ID:");
+        jLabel3.setText("Student ID:");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Password");
 
-        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,7 +144,7 @@ public class TeacherInfo extends javax.swing.JFrame {
             }
         });
 
-        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnClear.setText("Clear");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,7 +152,7 @@ public class TeacherInfo extends javax.swing.JFrame {
             }
         });
 
-        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -188,14 +187,6 @@ public class TeacherInfo extends javax.swing.JFrame {
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
 
-        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnEdit.setText("Edit");
-        btnEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -215,22 +206,22 @@ public class TeacherInfo extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(teacherID, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(studentID, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3)
                                     .addComponent(tfirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel6)
                                     .addComponent(tlastName, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel5)
-                                    .addComponent(tPass, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(btnClear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(tPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(84, 84, 84))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(91, 91, 91)
                                 .addComponent(jLabel2)))
@@ -245,17 +236,17 @@ public class TeacherInfo extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(searchBox)
                     .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(teacherID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(studentID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -268,15 +259,16 @@ public class TeacherInfo extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tPass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40))
         );
 
@@ -286,22 +278,22 @@ public class TeacherInfo extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // If all textfield are Empty
-        if (teacherID.getText().equals("") && tfirstName.getText().equals("") && tlastName.getText().equals("") && tPass.getText().equals("")) {
+        if (studentID.getText().equals("") && tfirstName.getText().equals("") && tlastName.getText().equals("") && tPass.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please Fill out!", "Warning", JOptionPane.WARNING_MESSAGE);
         } // If Teacher ID, First Name & Last Name are Empty
-        else if (teacherID.getText().equals("") && tfirstName.getText().equals("") && tlastName.getText().equals("")) {
+        else if (studentID.getText().equals("") && tfirstName.getText().equals("") && tlastName.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please Fill out! (Teacher ID, First Name, Last Name)", "Warning", JOptionPane.WARNING_MESSAGE);
         } // If Teacher ID, First Name & Pasword are Empty
-        else if (teacherID.getText().equals("") && tfirstName.getText().equals("") && tPass.getText().equals("")) {
+        else if (studentID.getText().equals("") && tfirstName.getText().equals("") && tPass.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please Fill out! (Teacher ID, First Name, Password)", "Warning", JOptionPane.WARNING_MESSAGE);
         } // If Teacher ID, Last Name & Pasword are Empty
-        else if (teacherID.getText().equals("") && tlastName.getText().equals("") && tPass.getText().equals("")) {
+        else if (studentID.getText().equals("") && tlastName.getText().equals("") && tPass.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please Fill out! (Teacher ID, Last Name, Password)", "Warning", JOptionPane.WARNING_MESSAGE);
         } // If Fist Name, Last Name & Pasword are Empty
         else if (tfirstName.getText().equals("") && tlastName.getText().equals("") && tPass.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please Fill out! (Fist Name, Last Name, Password)", "Warning", JOptionPane.WARNING_MESSAGE);
         } // If Teacher ID & First Name are Empty
-        else if (teacherID.getText().equals("") && tfirstName.getText().equals("")) {
+        else if (studentID.getText().equals("") && tfirstName.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please Fill out! (Teacher ID, First Name)", "Warning", JOptionPane.WARNING_MESSAGE);
         }
 
@@ -312,7 +304,7 @@ public class TeacherInfo extends javax.swing.JFrame {
         else if (tlastName.getText().equals("") && tPass.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Please Fill out! (Last Name, Password)", "Warning", JOptionPane.WARNING_MESSAGE);
         }  // If Teacher ID is Empty
-        else if (teacherID.getText().equals("")) {
+        else if (studentID.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Teacher ID is Empty!", "Warning", JOptionPane.WARNING_MESSAGE);
         } // If First Name is Empty
         else if (tfirstName.getText().equals("")) {
@@ -329,7 +321,7 @@ public class TeacherInfo extends javax.swing.JFrame {
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         //Clear all input
-        teacherID.setText("");
+        studentID.setText("");
         tfirstName.setText("");
         tlastName.setText("");
         tPass.setText("");
@@ -344,10 +336,6 @@ public class TeacherInfo extends javax.swing.JFrame {
         admin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
-
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -366,20 +354,21 @@ public class TeacherInfo extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TeacherInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StudentInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TeacherInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StudentInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TeacherInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StudentInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TeacherInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StudentInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TeacherInfo().setVisible(true);
+                new StudentInfo().setVisible(true);
             }
         });
     }
@@ -388,7 +377,6 @@ public class TeacherInfo extends javax.swing.JFrame {
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -400,8 +388,8 @@ public class TeacherInfo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField searchBox;
     private javax.swing.JLabel searchLabel;
+    private javax.swing.JTextField studentID;
     private javax.swing.JTextField tPass;
-    private javax.swing.JTextField teacherID;
     private javax.swing.JTable teacherTable;
     private javax.swing.JTextField tfirstName;
     private javax.swing.JTextField tlastName;
