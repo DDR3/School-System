@@ -4,19 +4,72 @@
  */
 package GUI;
 
+import javax.swing.*;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author NGR
  */
 public class StudentUI extends javax.swing.JFrame {
-
+    private String studentID;
+    
     /**
      * Creates new form StudentUI
      */
-    public StudentUI() {
+    public StudentUI(String studentID) {
         initComponents();
+        this.studentID = studentID;
+        connectDB();
     }
+    
+    final String url = "jdbc:mysql://localhost:3306/schooldb";
+    final String sqlDriver = "com.mysql.cj.jdbc.Driver";
+    final String sqlUser = "root";
+    final String sqlPass = "@mySQL36";
+    
+    Connection connect;
+    PreparedStatement prestate;
+    Statement statement;
+    ResultSet result;
 
+    public void connectDB() {
+        try {
+            Class.forName(sqlDriver);
+            connect = DriverManager.getConnection(url, sqlUser, sqlPass);
+            statement = connect.createStatement();
+            String queryStudentInfo = "SELECT * FROM `student_info` WHERE student_id = ?";
+            prestate = connect.prepareStatement(queryStudentInfo);
+            prestate.setString(1, studentID);
+            result = prestate.executeQuery(); 
+            
+            if (connect != null) {
+                System.out.println("Database Connected");
+            }     
+            
+            StringBuilder labelText = new StringBuilder();
+            String section = "";
+            
+            while(result.next()) {
+                String firstName = result.getString("first_name");
+                String lastName = result.getString("last_name");
+                section = result.getString("section");
+                labelText.append(firstName).append(" ").append(lastName);
+            }        
+            
+            label1.setText(labelText.toString());
+            label2.setText(section);
+            
+        } catch (SQLException ex) { // Exception for SQL
+            Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Database Offline!");
+        } catch (ClassNotFoundException ex) { //Exception for Class.forName()
+            Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,6 +84,9 @@ public class StudentUI extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        label1 = new java.awt.Label();
+        jLabel5 = new javax.swing.JLabel();
+        label2 = new java.awt.Label();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,6 +101,13 @@ public class StudentUI extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Grades");
 
+        label1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setText("Section:");
+
+        label2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -54,9 +117,17 @@ public class StudentUI extends javax.swing.JFrame {
                 .addComponent(jSeparator1))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(logo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(16, 16, 16)
+                        .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(label2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(259, 259, 259)
                 .addComponent(jLabel1)
@@ -68,15 +139,22 @@ public class StudentUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jLabel1))
-                .addGap(0, 246, Short.MAX_VALUE))
+                .addGap(0, 242, Short.MAX_VALUE))
         );
 
         pack();
@@ -113,7 +191,7 @@ public class StudentUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StudentUI().setVisible(true);
+                new StudentUI("yourUserID").setVisible(true);
             }
         });
     }
@@ -122,7 +200,10 @@ public class StudentUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
+    private java.awt.Label label1;
+    private java.awt.Label label2;
     private javax.swing.JLabel logo;
     // End of variables declaration//GEN-END:variables
 }

@@ -242,7 +242,7 @@ public class LoginUI extends javax.swing.JFrame {
                         result = prestate.executeQuery();
                         if (result.next()) {
                             JOptionPane.showMessageDialog(null, "Login Successfully!");
-                            StudentUI student = new StudentUI();
+                            StudentUI student = new StudentUI(userID.getText());
                             student.setVisible(true);
                             this.dispose();
                         } else { // if user ID and Password does not match in the database
