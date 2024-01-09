@@ -71,6 +71,7 @@ public class LoginUI extends javax.swing.JFrame {
         showPassword = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(727, 507));
 
         leftPanel.setBackground(new java.awt.Color(204, 204, 255));
 
@@ -114,7 +115,7 @@ public class LoginUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        welcome.setFont(new java.awt.Font("Segoe UI", 1, 38)); // NOI18N
+        welcome.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         welcome.setForeground(new java.awt.Color(102, 102, 255));
         welcome.setText("Welcome!");
 
@@ -154,7 +155,7 @@ public class LoginUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
+                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(labelPassword)
@@ -170,7 +171,7 @@ public class LoginUI extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(welcome)
                         .addGap(48, 48, 48)))
-                .addGap(0, 40, Short.MAX_VALUE))
+                .addGap(0, 47, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,7 +193,7 @@ public class LoginUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addContainerGap(74, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,13 +203,13 @@ public class LoginUI extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
         //If userID and Password is Empty
-        if (userID.getText().isEmpty() && password.getText().isEmpty()) {
+        if (userID.getText().equals("") && password.getText().equals("") ) {
             JOptionPane.showMessageDialog(null, "User ID and Password are Required!");
         } // if userID is Empty
-        else if (userID.getText().isEmpty()) {
+        else if (userID.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "User ID Required!");
         } // if Password is Empty
-        else if (password.getText().isEmpty()) {
+        else if (password.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Password Required!");
         } else {
             try { // if Admin
@@ -241,7 +242,7 @@ public class LoginUI extends javax.swing.JFrame {
                         result = prestate.executeQuery();
                         if (result.next()) {
                             JOptionPane.showMessageDialog(null, "Login Successfully!");
-                            StudentUI student = new StudentUI();
+                            StudentUI student = new StudentUI(userID.getText());
                             student.setVisible(true);
                             this.dispose();
                         } else { // if user ID and Password does not match in the database
