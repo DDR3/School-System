@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 public class StudentInfo extends javax.swing.JFrame {
 
     /**
-     * Creates new form TeacherInfo
+     * Creates new form StudentInfo
      */
     public StudentInfo() {
         initComponents();
@@ -38,13 +38,13 @@ public class StudentInfo extends javax.swing.JFrame {
     DefaultTableModel table;
     
     public void connectDB() {
-        try { // Automatically connected to database after the teacher info was click 
+        try { // Automatically connected to database after the student info was click 
             Class.forName(sqlDriver);
             connect = DriverManager.getConnection(url, sqlUser, sqlPass);
             statement = connect.createStatement();
-            String queryTeacherInfo = "SELECT * FROM student_info";
-            result = statement.executeQuery(queryTeacherInfo);
-            table = (DefaultTableModel)teacherTable.getModel();
+            String queryStudent = "SELECT * FROM student_info";
+            result = statement.executeQuery(queryStudent);
+            table = (DefaultTableModel)studentTable.getModel();
             if (connect != null) {
                 System.out.println("Database Connected");
             }     
@@ -52,10 +52,18 @@ public class StudentInfo extends javax.swing.JFrame {
                 table.addRow(new String[]{result.getString("student_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
             }        
         } catch (SQLException ex) { // Exception for SQL
-            Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Database Offline!");
+            Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
         } catch (ClassNotFoundException ex) { //Exception for Class.forName()
             Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    // Check if the four textField is not Empty
+    public void checkTextField() {
+      if(!studentID.getText().isEmpty() && !firstName.getText().isEmpty() && !lastName.getText().isEmpty() && !Pass.getText().isEmpty()) {
+            btnAdd.setEnabled(true);
+            btnSave.setEnabled(true);
         }
     }
     
@@ -68,15 +76,15 @@ public class StudentInfo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        teacherTable = new javax.swing.JTable();
+        scrollTable = new javax.swing.JScrollPane();
+        studentTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         searchLabel = new javax.swing.JLabel();
         searchBox = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        tlastName = new javax.swing.JTextField();
+        lastName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        tPass = new javax.swing.JTextField();
+        Pass = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
@@ -84,13 +92,20 @@ public class StudentInfo extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         studentID = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        tfirstName = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        firstName = new javax.swing.JTextField();
+        closePanel = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        teacherTable.setModel(new javax.swing.table.DefaultTableModel(
+        studentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -106,13 +121,18 @@ public class StudentInfo extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        teacherTable.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(teacherTable);
-        if (teacherTable.getColumnModel().getColumnCount() > 0) {
-            teacherTable.getColumnModel().getColumn(0).setResizable(false);
-            teacherTable.getColumnModel().getColumn(1).setResizable(false);
-            teacherTable.getColumnModel().getColumn(2).setResizable(false);
-            teacherTable.getColumnModel().getColumn(3).setResizable(false);
+        studentTable.getTableHeader().setReorderingAllowed(false);
+        studentTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                studentTableMouseClicked(evt);
+            }
+        });
+        scrollTable.setViewportView(studentTable);
+        if (studentTable.getColumnModel().getColumnCount() > 0) {
+            studentTable.getColumnModel().getColumn(0).setResizable(false);
+            studentTable.getColumnModel().getColumn(1).setResizable(false);
+            studentTable.getColumnModel().getColumn(2).setResizable(false);
+            studentTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 42)); // NOI18N
@@ -123,12 +143,30 @@ public class StudentInfo extends javax.swing.JFrame {
         searchLabel.setForeground(new java.awt.Color(102, 102, 255));
         searchLabel.setText("Search");
 
+        searchBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchBoxKeyReleased(evt);
+            }
+        });
+
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Last Name");
 
+        lastName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                lastNameKeyTyped(evt);
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 255));
-        jLabel2.setText("Add Student");
+        jLabel2.setText("Add & Edit");
+
+        Pass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                PassKeyTyped(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Student ID:");
@@ -136,7 +174,7 @@ public class StudentInfo extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Password");
 
-        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,7 +182,7 @@ public class StudentInfo extends javax.swing.JFrame {
             }
         });
 
-        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnClear.setText("Clear");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -152,7 +190,7 @@ public class StudentInfo extends javax.swing.JFrame {
             }
         });
 
-        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,13 +198,25 @@ public class StudentInfo extends javax.swing.JFrame {
             }
         });
 
+        studentID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                studentIDKeyPressed(evt);
+            }
+        });
+
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setText("First Name:");
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
+        firstName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                firstNameKeyTyped(evt);
+            }
+        });
+
+        closePanel.setBackground(new java.awt.Color(204, 204, 255));
 
         btnClose.setBackground(new java.awt.Color(255, 153, 153));
-        btnClose.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnClose.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnClose.setText("Close");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,75 +224,98 @@ public class StudentInfo extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout closePanelLayout = new javax.swing.GroupLayout(closePanel);
+        closePanel.setLayout(closePanelLayout);
+        closePanelLayout.setHorizontalGroup(
+            closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, closePanelLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnClose))
+                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        closePanelLayout.setVerticalGroup(
+            closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
         );
+
+        btnSave.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(closePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(40, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(215, 215, 215))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchBox))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(scrollTable, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(studentID, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(tfirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6)
-                                    .addComponent(tlastName, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(tPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(84, 84, 84))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(91, 91, 91)
-                                .addComponent(jLabel2)))
-                        .addGap(40, 40, 40))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(215, 215, 215))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(studentID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(firstName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lastName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(Pass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(40, 40, 40))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(104, 104, 104))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchBox)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchBox))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -250,25 +323,24 @@ public class StudentInfo extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tlastName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tPass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Pass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(34, 34, 34)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(scrollTable))
                 .addGap(40, 40, 40))
         );
 
@@ -277,58 +349,66 @@ public class StudentInfo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // If all textfield are Empty
-        if (studentID.getText().equals("") && tfirstName.getText().equals("") && tlastName.getText().equals("") && tPass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please Fill out!", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If Teacher ID, First Name & Last Name are Empty
-        else if (studentID.getText().equals("") && tfirstName.getText().equals("") && tlastName.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please Fill out! (Teacher ID, First Name, Last Name)", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If Teacher ID, First Name & Pasword are Empty
-        else if (studentID.getText().equals("") && tfirstName.getText().equals("") && tPass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please Fill out! (Teacher ID, First Name, Password)", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If Teacher ID, Last Name & Pasword are Empty
-        else if (studentID.getText().equals("") && tlastName.getText().equals("") && tPass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please Fill out! (Teacher ID, Last Name, Password)", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If Fist Name, Last Name & Pasword are Empty
-        else if (tfirstName.getText().equals("") && tlastName.getText().equals("") && tPass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please Fill out! (Fist Name, Last Name, Password)", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If Teacher ID & First Name are Empty
-        else if (studentID.getText().equals("") && tfirstName.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please Fill out! (Teacher ID, First Name)", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
-
-        // If First Name & Last Name are Empty
-        else if (tfirstName.getText().equals("") && tlastName.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please Fill out! (First Name, Last Name)", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If Last Name & Password are Empty
-        else if (tlastName.getText().equals("") && tPass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Please Fill out! (Last Name, Password)", "Warning", JOptionPane.WARNING_MESSAGE);
-        }  // If Teacher ID is Empty
-        else if (studentID.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Teacher ID is Empty!", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If First Name is Empty
-        else if (tfirstName.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "First Name is Empty!", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If Last Name is Empty
-        else if (tlastName.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Last Name is Empty!", "Warning", JOptionPane.WARNING_MESSAGE);
-        } // If Last Name is Empty
-        else if (tPass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Pasword is Empty!", "Warning", JOptionPane.WARNING_MESSAGE);
-        }
-
+    // check if userID is not a number
+    if(!studentID.getText().matches("[0-9]+")) {
+        JOptionPane.showMessageDialog(this, "Student ID must be a number!");
+    } else {   
+        try { // check if student ID already exists
+            String checkQuery = "SELECT * FROM student_info WHERE student_id = ?";
+            prestate = connect.prepareStatement(checkQuery);
+            prestate.setString(1, studentID.getText());
+            result = prestate.executeQuery();
+            if(result.next()) {
+                JOptionPane.showMessageDialog(this, "Student ID already exists!", "Warning", JOptionPane.WARNING_MESSAGE);
+            } // add to databebase if studentID is a number  
+            else {
+            String addStudent = "INSERT into student_info (student_id, first_name, last_name, password) VALUES (?, ?, ?, ?)";
+            prestate = connect.prepareStatement(addStudent);
+            
+            prestate.setString(1, studentID.getText());
+            prestate.setString(2, firstName.getText());
+            prestate.setString(3, lastName.getText());
+            prestate.setString(4, Pass.getText());
+            prestate.executeUpdate();         
+            // showMessageDialog
+            JOptionPane.showMessageDialog(this, "Added Successfully!");
+            //Clear all input
+            studentID.setText("");
+            firstName.setText("");
+            lastName.setText("");
+            Pass.setText("");
+            // disable add button
+            btnAdd.setEnabled(false);
+            // automatically update the table
+            table.setRowCount(0);
+            connectDB();                  
+            }
+        } catch (SQLException ex) { // Exception for SQL
+            Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } 
+      }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         //Clear all input
         studentID.setText("");
-        tfirstName.setText("");
-        tlastName.setText("");
-        tPass.setText("");
+        firstName.setText("");
+        lastName.setText("");
+        Pass.setText("");
+        // enable studentID textfield
+        studentID.setEnabled(true);
+        // disable delete, Save and Add button
+        btnDelete.setEnabled(false);
+        btnSave.setEnabled(false);
+        btnAdd.setEnabled(false);
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-
+        table.setRowCount(0);
+        connectDB();    
+        JOptionPane.showMessageDialog(this, "Table has been Updated!");
+        searchBox.setText("");
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
@@ -336,6 +416,140 @@ public class StudentInfo extends javax.swing.JFrame {
         admin.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    try {
+        // Check if the student_id already exists in the database
+        String checkQuery = "SELECT * FROM student_info WHERE student_id = ?";
+        prestate = connect.prepareStatement(checkQuery);
+        prestate.setString(1, studentID.getText());
+        result = prestate.executeQuery();
+
+        if (result.next()) {
+            // student_id already exists, perform the update
+            String editStudent = "UPDATE student_info SET first_name=?, last_name=?, password=? WHERE student_id=?";
+            prestate = connect.prepareStatement(editStudent);
+            prestate.setString(1, firstName.getText());
+            prestate.setString(2, lastName.getText());
+            prestate.setString(3, Pass.getText());
+            prestate.setString(4, studentID.getText());
+            prestate.executeUpdate();
+            // showMessageDialog
+             JOptionPane.showMessageDialog(this, "Edit Successfully!");
+            // Clear all input
+            studentID.setText("");
+            firstName.setText("");
+            lastName.setText("");
+            Pass.setText("");
+            // disable save, add & delete button
+            btnSave.setEnabled(false);
+            btnAdd.setEnabled(false);
+            btnDelete.setEnabled(false);
+            // automatically update the table
+            table.setRowCount(0);
+            connectDB();
+        } 
+    } catch (SQLException ex) {
+         // Exception for SQL
+         Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
+         JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
+       }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void studentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studentTableMouseClicked
+        int row = studentTable.getSelectedRow();
+        table = (DefaultTableModel)studentTable.getModel();
+        //get and display info in textbox
+        studentID.setText(table.getValueAt(row, 0).toString());
+        firstName.setText(table.getValueAt(row, 1).toString());
+        lastName.setText(table.getValueAt(row, 2).toString());
+        Pass.setText(table.getValueAt(row, 3).toString());
+        // enable save & clear button
+        btnSave.setEnabled(true);
+        btnDelete.setEnabled(true);
+        // disable studentID textfield & add button
+        btnAdd.setEnabled(false);
+        studentID.setEnabled(false);
+    }//GEN-LAST:event_studentTableMouseClicked
+
+    private void studentIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_studentIDKeyPressed
+        // disable save button
+        btnSave.setEnabled(false);
+        // Check if the four textField is not Empty
+        checkTextField();
+    }//GEN-LAST:event_studentIDKeyPressed
+
+    private void firstNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_firstNameKeyTyped
+        // disable save button
+        btnSave.setEnabled(false);
+        // Check if the four textField is not Empty
+        checkTextField();
+    }//GEN-LAST:event_firstNameKeyTyped
+
+    private void lastNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lastNameKeyTyped
+        // disable save button
+        btnSave.setEnabled(false);
+        // Check if the four textField is not Empty
+        checkTextField();
+    }//GEN-LAST:event_lastNameKeyTyped
+
+    private void PassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PassKeyTyped
+        // disable save button
+        btnSave.setEnabled(false);
+        // Check if the four textField is not Empty
+        checkTextField();
+    }//GEN-LAST:event_PassKeyTyped
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+       try {
+           int row = studentTable.getSelectedRow();
+           String queryDelete = "DELETE FROM student_info WHERE student_id ="+ studentTable.getModel().getValueAt(row, 0);
+           prestate = connect.prepareStatement(queryDelete);
+           prestate.executeUpdate();
+           // delete conformation
+           JOptionPane.showMessageDialog(this, "Delete Successfully!");
+           // disable delete & save button
+           btnDelete.setEnabled(false);
+           btnSave.setEnabled(false);
+           // enable studentID textfield
+           studentID.setEnabled(true);
+           // clear all four textfields
+           studentID.setText("");
+           firstName.setText("");
+           lastName.setText("");
+           Pass.setText("");    
+           // automatically update the table
+           table.setRowCount(0);
+           connectDB();
+       } catch (SQLException ex) { // Exception for SQL
+           Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
+           JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
+       } 
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // disable delete, Save and Add button when window is open
+        btnDelete.setEnabled(false);
+        btnSave.setEnabled(false);
+        btnAdd.setEnabled(false);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
+        try {
+            String querySearch = "SELECT student_id, first_name, last_name, password FROM student_info WHERE student_id=? OR first_name=? OR last_name=? ";
+            prestate = connect.prepareStatement(querySearch);
+            prestate.setString(1, searchBox.getText());
+            prestate.setString(2, searchBox.getText());
+            prestate.setString(3, searchBox.getText());     
+            result = prestate.executeQuery();
+            table.setRowCount(0);
+            while(result.next()){
+                table.addRow(new String[]{result.getString("student_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_searchBoxKeyReleased
 
     /**
      * @param args the command line arguments
@@ -364,6 +578,12 @@ public class StudentInfo extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -374,24 +594,26 @@ public class StudentInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Pass;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JPanel closePanel;
+    private javax.swing.JTextField firstName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField lastName;
+    private javax.swing.JScrollPane scrollTable;
     private javax.swing.JTextField searchBox;
     private javax.swing.JLabel searchLabel;
     private javax.swing.JTextField studentID;
-    private javax.swing.JTextField tPass;
-    private javax.swing.JTable teacherTable;
-    private javax.swing.JTextField tfirstName;
-    private javax.swing.JTextField tlastName;
+    private javax.swing.JTable studentTable;
     // End of variables declaration//GEN-END:variables
 }
