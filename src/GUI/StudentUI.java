@@ -36,6 +36,10 @@ public class StudentUI extends javax.swing.JFrame {
     PreparedStatement prestate;
     Statement statement;
     ResultSet result;
+
+    StudentUI() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 
     public void connectDB() {
