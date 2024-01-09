@@ -20,6 +20,8 @@ public class AdminUI extends javax.swing.JFrame {
      */
     public AdminUI() {
         initComponents();
+        // lock window size
+        this.setResizable(false);
     }
     
     
@@ -38,6 +40,8 @@ public class AdminUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         btnLogout = new javax.swing.JButton();
         btnAdmin = new javax.swing.JButton();
+        btnGrade = new javax.swing.JButton();
+        btnSubject = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,6 +97,22 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
 
+        btnGrade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnGrade.setText("Grade Management");
+        btnGrade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGradeActionPerformed(evt);
+            }
+        });
+
+        btnSubject.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnSubject.setText("Subject Management");
+        btnSubject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubjectActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,7 +128,9 @@ public class AdminUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnTeacherInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnStudentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSubject, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(116, 116, 116))))
         );
         layout.setVerticalGroup(
@@ -123,7 +145,11 @@ public class AdminUI extends javax.swing.JFrame {
                 .addComponent(btnTeacherInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addComponent(btnStudentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(125, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(btnGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(btnSubject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -167,6 +193,22 @@ public class AdminUI extends javax.swing.JFrame {
           this.dispose();
     }//GEN-LAST:event_btnAdminActionPerformed
 
+    private void btnGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGradeActionPerformed
+        // show grade management UI
+        Grade grade = new Grade();
+        grade.setVisible(true);
+        // remove AdminUI
+        this.dispose();
+    }//GEN-LAST:event_btnGradeActionPerformed
+
+    private void btnSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubjectActionPerformed
+          // show subject UI
+          Subject subject = new Subject();
+          subject.setVisible(true);
+          // remove AdminUI
+          this.dispose();
+    }//GEN-LAST:event_btnSubjectActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -204,8 +246,10 @@ public class AdminUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdmin;
+    private javax.swing.JButton btnGrade;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnStudentInfo;
+    private javax.swing.JButton btnSubject;
     private javax.swing.JButton btnTeacherInfo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

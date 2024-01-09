@@ -22,6 +22,8 @@ public class LoginUI extends javax.swing.JFrame {
     public LoginUI() throws ClassNotFoundException {
         initComponents();
         connectDB();
+        // lock window size
+        this.setResizable(false);        
     }
     
     final String url = "jdbc:mysql://localhost:3306/schooldb";

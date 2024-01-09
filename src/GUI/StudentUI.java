@@ -193,8 +193,9 @@ public class StudentUI extends javax.swing.JFrame {
 
         label3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton1.setText("Log Out");
+        jButton1.setBackground(new java.awt.Color(255, 153, 153));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton1.setText("Logout");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -266,13 +267,17 @@ public class StudentUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       // Log out action
+        int logout = JOptionPane.showConfirmDialog(null, "Are you sure?", "Confirm Logout", JOptionPane.YES_NO_OPTION);
+        if(logout==JOptionPane.YES_OPTION){
+        // Log out action
         dispose(); // Close the current frame
         try {
             new LoginUI().setVisible(true); // Open the login menu
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }        
+        }    
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

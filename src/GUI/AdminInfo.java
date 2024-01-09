@@ -24,6 +24,8 @@ public class AdminInfo extends javax.swing.JFrame {
     public AdminInfo() {
         initComponents();
         connectDB();
+        // lock window size
+        this.setResizable(false);
     }
 
     final String url = "jdbc:mysql://localhost:3306/schooldb";
@@ -66,6 +68,8 @@ public class AdminInfo extends javax.swing.JFrame {
             btnSave.setEnabled(true);
         }
     }
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -394,6 +398,8 @@ public class AdminInfo extends javax.swing.JFrame {
             // Clear all input
             adminID.setText("");
             pass.setText("");
+            // enable adminID textfield
+            adminID.setEnabled(true);
             // disable save, add & delete button
             btnSave.setEnabled(false);
             btnAdd.setEnabled(false);
@@ -471,9 +477,10 @@ public class AdminInfo extends javax.swing.JFrame {
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
         try {
-            String querySearch = "SELECT admin_id, password FROM admin_info WHERE admin_id=?";
+            String querySearch = "SELECT admin_id, password FROM admin_info WHERE admin_id=? or password=?";
             prestate = connect.prepareStatement(querySearch);
             prestate.setString(1, searchBox.getText());   
+            prestate.setString(2, searchBox.getText());
             result = prestate.executeQuery();
             table.setRowCount(0);
             while(result.next()){

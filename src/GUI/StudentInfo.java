@@ -24,6 +24,8 @@ public class StudentInfo extends javax.swing.JFrame {
     public StudentInfo() {
         initComponents();
         connectDB();
+        // lock window size
+        this.setResizable(false);        
     }
 
     final String url = "jdbc:mysql://localhost:3306/schooldb";
