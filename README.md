@@ -7,7 +7,7 @@ Applications used
 - [Visual Studio Code](https://code.visualstudio.com/download) | [Netbeans](https://netbeans.apache.org/front/main/download/nb20/)
 - [XAMPP](https://www.apachefriends.org/download.html) | [mySQL](https://dev.mysql.com/downloads/installer/)
   
-## Need to implements
+## Implemented
 
 Admin 
 - Can changes students and teachers password
@@ -21,7 +21,7 @@ Teacher
 Student
 - Can only view the grades
 
-## Current Progress
+## Progress
 - LoginUI
 
 <img src="https://raw.githubusercontent.com/DDR3/School-System/main/Screenshots/LoginUI.2.png" width="30%"></img>  <img src="https://raw.githubusercontent.com/DDR3/School-System/main/Screenshots/Database Offline.png" width="30%"></img> <img src="https://raw.githubusercontent.com/DDR3/School-System/main/Screenshots/Login Successfully.png" width="30%"></img> <img src="https://raw.githubusercontent.com/DDR3/School-System/main/Screenshots/logout.png" width="30%">
