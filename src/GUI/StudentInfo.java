@@ -51,7 +51,7 @@ public class StudentInfo extends javax.swing.JFrame {
                 System.out.println("Database Connected");
             }     
             while(result.next()) {
-                table.addRow(new String[]{result.getString("student_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
+                table.addRow(new String[]{result.getString("student_id"), result.getString("first_name"), result.getString("last_name"), result.getString("section"), result.getString("password")});
             }        
         } catch (SQLException ex) { // Exception for SQL
             Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
@@ -63,7 +63,7 @@ public class StudentInfo extends javax.swing.JFrame {
     
     // Check if the four textField is not Empty
     public void checkTextField() {
-      if(!studentID.getText().isEmpty() && !firstName.getText().isEmpty() && !lastName.getText().isEmpty() && !Pass.getText().isEmpty()) {
+      if(!studentID.getText().isEmpty() && !firstName.getText().isEmpty() && !lastName.getText().isEmpty() && !pass.getText().isEmpty()) {
             btnAdd.setEnabled(true);
             btnSave.setEnabled(true);
         }
@@ -86,7 +86,7 @@ public class StudentInfo extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         lastName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        Pass = new javax.swing.JTextField();
+        pass = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
@@ -99,6 +99,8 @@ public class StudentInfo extends javax.swing.JFrame {
         btnClose = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        section = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -112,11 +114,11 @@ public class StudentInfo extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Student ID", "First Name", "Last Name", "Password"
+                "Student ID", "First Name", "Last Name", "Section", "Password"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -135,6 +137,7 @@ public class StudentInfo extends javax.swing.JFrame {
             studentTable.getColumnModel().getColumn(1).setResizable(false);
             studentTable.getColumnModel().getColumn(2).setResizable(false);
             studentTable.getColumnModel().getColumn(3).setResizable(false);
+            studentTable.getColumnModel().getColumn(4).setResizable(false);
         }
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 42)); // NOI18N
@@ -152,7 +155,7 @@ public class StudentInfo extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel4.setText("Last Name");
+        jLabel4.setText("Last Name:");
 
         lastName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -164,9 +167,9 @@ public class StudentInfo extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(102, 102, 255));
         jLabel2.setText("Add & Edit");
 
-        Pass.addKeyListener(new java.awt.event.KeyAdapter() {
+        pass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                PassKeyTyped(evt);
+                passKeyTyped(evt);
             }
         });
 
@@ -174,7 +177,7 @@ public class StudentInfo extends javax.swing.JFrame {
         jLabel3.setText("Student ID:");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel5.setText("Password");
+        jLabel5.setText("Password:");
 
         btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         btnAdd.setText("Add");
@@ -255,6 +258,15 @@ public class StudentInfo extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel7.setText("Section:");
+
+        section.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                sectionKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -274,7 +286,7 @@ public class StudentInfo extends javax.swing.JFrame {
                                 .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(scrollTable, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(scrollTable, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(40, 40, 40)
@@ -296,7 +308,9 @@ public class StudentInfo extends javax.swing.JFrame {
                                             .addComponent(lastName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(Pass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(pass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(section, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGap(40, 40, 40))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -310,7 +324,7 @@ public class StudentInfo extends javax.swing.JFrame {
                 .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -331,9 +345,13 @@ public class StudentInfo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(section, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Pass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -370,7 +388,7 @@ public class StudentInfo extends javax.swing.JFrame {
             prestate.setString(1, studentID.getText());
             prestate.setString(2, firstName.getText());
             prestate.setString(3, lastName.getText());
-            prestate.setString(4, Pass.getText());
+            prestate.setString(4, pass.getText());
             prestate.executeUpdate();         
             // showMessageDialog
             JOptionPane.showMessageDialog(this, "Added Successfully!");
@@ -378,7 +396,7 @@ public class StudentInfo extends javax.swing.JFrame {
             studentID.setText("");
             firstName.setText("");
             lastName.setText("");
-            Pass.setText("");
+            pass.setText("");
             // disable add button
             btnAdd.setEnabled(false);
             // automatically update the table
@@ -397,7 +415,14 @@ public class StudentInfo extends javax.swing.JFrame {
         studentID.setText("");
         firstName.setText("");
         lastName.setText("");
-        Pass.setText("");
+        section.setText("");
+        pass.setText("");
+        searchBox.setText("");
+        // automatically get table data
+        if(searchBox.getText().isEmpty()){
+            table.setRowCount(0);            
+            connectDB();
+        }  
         // enable studentID textfield
         studentID.setEnabled(true);
         // disable delete, Save and Add button
@@ -407,6 +432,7 @@ public class StudentInfo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // update table   
         table.setRowCount(0);
         connectDB();    
         JOptionPane.showMessageDialog(this, "Table has been Updated!");
@@ -429,12 +455,13 @@ public class StudentInfo extends javax.swing.JFrame {
 
         if (result.next()) {
             // student_id already exists, perform the update
-            String editStudent = "UPDATE student_info SET first_name=?, last_name=?, password=? WHERE student_id=?";
+            String editStudent = "UPDATE student_info SET first_name=?, last_name=?, section=?, password=? WHERE student_id=?";
             prestate = connect.prepareStatement(editStudent);
             prestate.setString(1, firstName.getText());
             prestate.setString(2, lastName.getText());
-            prestate.setString(3, Pass.getText());
-            prestate.setString(4, studentID.getText());
+            prestate.setString(3, section.getText());
+            prestate.setString(4, pass.getText());
+            prestate.setString(5, studentID.getText());
             prestate.executeUpdate();
             // showMessageDialog
              JOptionPane.showMessageDialog(this, "Edit Successfully!");
@@ -442,7 +469,7 @@ public class StudentInfo extends javax.swing.JFrame {
             studentID.setText("");
             firstName.setText("");
             lastName.setText("");
-            Pass.setText("");
+            pass.setText("");
             // disable save, add & delete button
             btnSave.setEnabled(false);
             btnAdd.setEnabled(false);
@@ -465,7 +492,8 @@ public class StudentInfo extends javax.swing.JFrame {
         studentID.setText(table.getValueAt(row, 0).toString());
         firstName.setText(table.getValueAt(row, 1).toString());
         lastName.setText(table.getValueAt(row, 2).toString());
-        Pass.setText(table.getValueAt(row, 3).toString());
+        section.setText(table.getValueAt(row, 3).toString());
+        pass.setText(table.getValueAt(row, 4).toString());
         // enable save & clear button
         btnSave.setEnabled(true);
         btnDelete.setEnabled(true);
@@ -495,12 +523,12 @@ public class StudentInfo extends javax.swing.JFrame {
         checkTextField();
     }//GEN-LAST:event_lastNameKeyTyped
 
-    private void PassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_PassKeyTyped
+    private void passKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passKeyTyped
         // disable save button
         btnSave.setEnabled(false);
         // Check if the four textField is not Empty
         checkTextField();
-    }//GEN-LAST:event_PassKeyTyped
+    }//GEN-LAST:event_passKeyTyped
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
        try {
@@ -519,7 +547,7 @@ public class StudentInfo extends javax.swing.JFrame {
            studentID.setText("");
            firstName.setText("");
            lastName.setText("");
-           Pass.setText("");    
+           pass.setText("");    
            // automatically update the table
            table.setRowCount(0);
            connectDB();
@@ -538,20 +566,29 @@ public class StudentInfo extends javax.swing.JFrame {
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
         try {
-            String querySearch = "SELECT student_id, first_name, last_name, password FROM student_info WHERE student_id=? OR first_name=? OR last_name=? ";
+            String querySearch = "SELECT student_id, first_name, last_name, section, password FROM student_info WHERE student_id=? OR first_name=? OR last_name=? OR section=? ";
             prestate = connect.prepareStatement(querySearch);
             prestate.setString(1, searchBox.getText());
             prestate.setString(2, searchBox.getText());
-            prestate.setString(3, searchBox.getText());     
+            prestate.setString(3, searchBox.getText());   
+            prestate.setString(4, searchBox.getText());
             result = prestate.executeQuery();
             table.setRowCount(0);
             while(result.next()){
-                table.addRow(new String[]{result.getString("student_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
-            }
+                table.addRow(new String[]{result.getString("student_id"), result.getString("first_name"), result.getString("last_name"), result.getString("section"), result.getString("password")});
+            }   
+            // automatically get table data
+            if(searchBox.getText().isEmpty()) {
+                connectDB();
+            }            
         } catch (SQLException ex) {
-            Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SearchStudent.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_searchBoxKeyReleased
+
+    private void sectionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sectionKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sectionKeyTyped
 
     /**
      * @param args the command line arguments
@@ -596,7 +633,6 @@ public class StudentInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField Pass;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnClose;
@@ -611,10 +647,13 @@ public class StudentInfo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField lastName;
+    private javax.swing.JTextField pass;
     private javax.swing.JScrollPane scrollTable;
     private javax.swing.JTextField searchBox;
     private javax.swing.JLabel searchLabel;
+    private javax.swing.JTextField section;
     private javax.swing.JTextField studentID;
     private javax.swing.JTable studentTable;
     // End of variables declaration//GEN-END:variables

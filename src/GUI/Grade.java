@@ -417,6 +417,12 @@ public class Grade extends javax.swing.JFrame {
         teacherID.setText("");
         subjectID.setText("");
         grade.setText("");
+        searchBox.setText("");
+        // automatically get table data
+        if(searchBox.getText().isEmpty()){
+            table.setRowCount(0);            
+            connectDB();
+        }     
         // enable teacherID textfield
         gradeID.setEnabled(true);
         studentID.setEnabled(true);
@@ -429,6 +435,7 @@ public class Grade extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // update table   
         table.setRowCount(0);
         connectDB();    
         JOptionPane.showMessageDialog(this, "Table has been Updated!");
@@ -587,6 +594,10 @@ public class Grade extends javax.swing.JFrame {
             while(result.next()){
                 table.addRow(new String[]{result.getString("grade_id"), result.getString("student_id"), result.getString("teacher_id"), result.getString("subject_id"), result.getString("grade")});
             }
+            // automatically get table data
+            if(searchBox.getText().isEmpty()) {
+                connectDB();
+            }              
         } catch (SQLException ex) {
             Logger.getLogger(Grade.class.getName()).log(Level.SEVERE, null, ex);
         }

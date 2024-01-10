@@ -63,7 +63,7 @@ public class TeacherInfo extends javax.swing.JFrame {
     
     // Check if the four textField is not Empty
     public void checkTextField() {
-      if(!teacherID.getText().isEmpty() && !tfirstName.getText().isEmpty() && !tlastName.getText().isEmpty() && !tPass.getText().isEmpty()) {
+      if(!teacherID.getText().isEmpty() && !firstName.getText().isEmpty() && !lastName.getText().isEmpty() && !pass.getText().isEmpty()) {
             btnAdd.setEnabled(true);
             btnSave.setEnabled(true);
         }
@@ -84,9 +84,9 @@ public class TeacherInfo extends javax.swing.JFrame {
         searchLabel = new javax.swing.JLabel();
         searchBox = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        tlastName = new javax.swing.JTextField();
+        lastName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        tPass = new javax.swing.JTextField();
+        pass = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
@@ -94,7 +94,7 @@ public class TeacherInfo extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         teacherID = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        tfirstName = new javax.swing.JTextField();
+        firstName = new javax.swing.JTextField();
         closePanel = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
@@ -154,9 +154,9 @@ public class TeacherInfo extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Last Name");
 
-        tlastName.addKeyListener(new java.awt.event.KeyAdapter() {
+        lastName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                tlastNameKeyTyped(evt);
+                lastNameKeyTyped(evt);
             }
         });
 
@@ -164,9 +164,9 @@ public class TeacherInfo extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(102, 102, 255));
         jLabel2.setText("Add & Edit");
 
-        tPass.addKeyListener(new java.awt.event.KeyAdapter() {
+        pass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                tPassKeyTyped(evt);
+                passKeyTyped(evt);
             }
         });
 
@@ -209,9 +209,9 @@ public class TeacherInfo extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setText("First Name:");
 
-        tfirstName.addKeyListener(new java.awt.event.KeyAdapter() {
+        firstName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                tfirstNameKeyTyped(evt);
+                firstNameKeyTyped(evt);
             }
         });
 
@@ -291,12 +291,12 @@ public class TeacherInfo extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(teacherID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tfirstName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(firstName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tlastName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lastName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(tPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(pass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGap(40, 40, 40))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -325,15 +325,15 @@ public class TeacherInfo extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tfirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tlastName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tPass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -368,17 +368,17 @@ public class TeacherInfo extends javax.swing.JFrame {
             prestate = connect.prepareStatement(addTeacher);
             
             prestate.setString(1, teacherID.getText());
-            prestate.setString(2, tfirstName.getText());
-            prestate.setString(3, tlastName.getText());
-            prestate.setString(4, tPass.getText());
+            prestate.setString(2, firstName.getText());
+            prestate.setString(3, lastName.getText());
+            prestate.setString(4, pass.getText());
             prestate.executeUpdate();         
             // showMessageDialog
             JOptionPane.showMessageDialog(this, "Added Successfully!");
             //Clear all input
             teacherID.setText("");
-            tfirstName.setText("");
-            tlastName.setText("");
-            tPass.setText("");
+            firstName.setText("");
+            lastName.setText("");
+            pass.setText("");
             // disable add button
             btnAdd.setEnabled(false);
             // automatically update the table
@@ -395,18 +395,25 @@ public class TeacherInfo extends javax.swing.JFrame {
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         //Clear all input
         teacherID.setText("");
-        tfirstName.setText("");
-        tlastName.setText("");
-        tPass.setText("");
+        firstName.setText("");
+        lastName.setText("");
+        pass.setText("");
+        searchBox.setText("");
+        // automatically get table data
+        if(searchBox.getText().isEmpty()){
+            table.setRowCount(0);            
+            connectDB();
+        }  
         // enable teacherID textfield
         teacherID.setEnabled(true);
-        // disable delete, Save and Add button
+        // disable buttons button
         btnDelete.setEnabled(false);
         btnSave.setEnabled(false);
         btnAdd.setEnabled(false);
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // update table  
         table.setRowCount(0);
         connectDB();    
         JOptionPane.showMessageDialog(this, "Table has been Updated!");
@@ -431,18 +438,18 @@ public class TeacherInfo extends javax.swing.JFrame {
             // teacher_id already exists, perform the update
             String editTeacher = "UPDATE teacher_info SET first_name=?, last_name=?, password=? WHERE teacher_id=?";
             prestate = connect.prepareStatement(editTeacher);
-            prestate.setString(1, tfirstName.getText());
-            prestate.setString(2, tlastName.getText());
-            prestate.setString(3, tPass.getText());
+            prestate.setString(1, firstName.getText());
+            prestate.setString(2, lastName.getText());
+            prestate.setString(3, pass.getText());
             prestate.setString(4, teacherID.getText());
             prestate.executeUpdate();
             // showMessageDialog
              JOptionPane.showMessageDialog(this, "Edit Successfully!");
             // Clear all input
             teacherID.setText("");
-            tfirstName.setText("");
-            tlastName.setText("");
-            tPass.setText("");
+            firstName.setText("");
+            lastName.setText("");
+            pass.setText("");
             // disable save, add & delete button
             btnSave.setEnabled(false);
             btnAdd.setEnabled(false);
@@ -463,9 +470,9 @@ public class TeacherInfo extends javax.swing.JFrame {
         table = (DefaultTableModel)teacherTable.getModel();
         //get and display info in textbox
         teacherID.setText(table.getValueAt(row, 0).toString());
-        tfirstName.setText(table.getValueAt(row, 1).toString());
-        tlastName.setText(table.getValueAt(row, 2).toString());
-        tPass.setText(table.getValueAt(row, 3).toString());
+        firstName.setText(table.getValueAt(row, 1).toString());
+        lastName.setText(table.getValueAt(row, 2).toString());
+        pass.setText(table.getValueAt(row, 3).toString());
         // enable save & clear button
         btnSave.setEnabled(true);
         btnDelete.setEnabled(true);
@@ -481,26 +488,26 @@ public class TeacherInfo extends javax.swing.JFrame {
         checkTextField();
     }//GEN-LAST:event_teacherIDKeyPressed
 
-    private void tfirstNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfirstNameKeyTyped
+    private void firstNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_firstNameKeyTyped
         // disable save button
         btnSave.setEnabled(false);
         // Check if the four textField is not Empty
         checkTextField();
-    }//GEN-LAST:event_tfirstNameKeyTyped
+    }//GEN-LAST:event_firstNameKeyTyped
 
-    private void tlastNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tlastNameKeyTyped
+    private void lastNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lastNameKeyTyped
         // disable save button
         btnSave.setEnabled(false);
         // Check if the four textField is not Empty
         checkTextField();
-    }//GEN-LAST:event_tlastNameKeyTyped
+    }//GEN-LAST:event_lastNameKeyTyped
 
-    private void tPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tPassKeyTyped
+    private void passKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passKeyTyped
         // disable save button
         btnSave.setEnabled(false);
         // Check if the four textField is not Empty
         checkTextField();
-    }//GEN-LAST:event_tPassKeyTyped
+    }//GEN-LAST:event_passKeyTyped
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
        try {
@@ -517,9 +524,9 @@ public class TeacherInfo extends javax.swing.JFrame {
            teacherID.setEnabled(true);
            // clear all four textfields
            teacherID.setText("");
-           tfirstName.setText("");
-           tlastName.setText("");
-           tPass.setText("");    
+           firstName.setText("");
+           lastName.setText("");
+           pass.setText("");    
            // automatically update the table
            table.setRowCount(0);
            connectDB();
@@ -547,6 +554,10 @@ public class TeacherInfo extends javax.swing.JFrame {
             table.setRowCount(0);
             while(result.next()){
                 table.addRow(new String[]{result.getString("teacher_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
+            }            
+            // automatically get table data
+            if(searchBox.getText().isEmpty()) {
+                connectDB();
             }
         } catch (SQLException ex) {
             Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
@@ -599,19 +610,19 @@ public class TeacherInfo extends javax.swing.JFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JPanel closePanel;
+    private javax.swing.JTextField firstName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField lastName;
+    private javax.swing.JTextField pass;
     private javax.swing.JScrollPane scrollTable;
     private javax.swing.JTextField searchBox;
     private javax.swing.JLabel searchLabel;
-    private javax.swing.JTextField tPass;
     private javax.swing.JTextField teacherID;
     private javax.swing.JTable teacherTable;
-    private javax.swing.JTextField tfirstName;
-    private javax.swing.JTextField tlastName;
     // End of variables declaration//GEN-END:variables
 }

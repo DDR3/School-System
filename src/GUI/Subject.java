@@ -428,7 +428,12 @@ public class Subject extends javax.swing.JFrame {
         //Clear all input
         subjectID.setText("");
         subjectName.setText("");
+        searchBox.setText("");
         // enable subjectID textfield
+        if(searchBox.getText().isEmpty()){
+            table.setRowCount(0);            
+            connectDB();
+        }         
         subjectID.setEnabled(true);
         // disable delete, Save and Add button
         btnDelete.setEnabled(false);
@@ -437,6 +442,7 @@ public class Subject extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // update table   
         table.setRowCount(0);
         connectDB();    
         JOptionPane.showMessageDialog(this, "Table has been Updated!");
@@ -555,6 +561,10 @@ public class Subject extends javax.swing.JFrame {
             while(result.next()){
                 table.addRow(new String[]{result.getString("subject_id"), result.getString("subject_name")});
             }
+            // automatically get table data
+            if(searchBox.getText().isEmpty()) {
+                connectDB();
+            }              
         } catch (SQLException ex) {
             Logger.getLogger(Subject.class.getName()).log(Level.SEVERE, null, ex);
         }
