@@ -302,7 +302,7 @@ public class LoginUI extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordKeyPressed
 
     private void userIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userIDKeyPressed
-        // if enter key is press move inpunt to password    
+        // if enter key is press move input to password    
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
            password.requestFocus();
         }    
