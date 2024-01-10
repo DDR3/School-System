@@ -24,6 +24,8 @@ public class TeacherInfo extends javax.swing.JFrame {
     public TeacherInfo() {
         initComponents();
         connectDB();
+        // lock window size
+        this.setResizable(false);
     }
 
     final String url = "jdbc:mysql://localhost:3306/schooldb";
@@ -35,7 +37,6 @@ public class TeacherInfo extends javax.swing.JFrame {
     PreparedStatement prestate;
     Statement statement;
     ResultSet result;
-    ResultSetMetaData metaData;
     DefaultTableModel table;
     
     public void connectDB() {
@@ -43,29 +44,28 @@ public class TeacherInfo extends javax.swing.JFrame {
             Class.forName(sqlDriver);
             connect = DriverManager.getConnection(url, sqlUser, sqlPass);
             statement = connect.createStatement();
-            String queryTeacherInfo = "SELECT * FROM teacher_info";
-            result = statement.executeQuery(queryTeacherInfo);
-            metaData = result.getMetaData();
-            int n = metaData.getColumnCount();
+            String queryTeacher = "SELECT * FROM teacher_info";
+            result = statement.executeQuery(queryTeacher);
             table = (DefaultTableModel)teacherTable.getModel();
             if (connect != null) {
-                System.out.println("Database Connected!");
+                System.out.println("Database Connected");
             }     
             while(result.next()) {
-              Vector getTable = new Vector();
-              for(int i = 1; i <= n; i++) {
-                  getTable.add(result.getString("teacher_id"));
-                  getTable.add(result.getString(2));
-                  getTable.add(result.getString(3));
-                  getTable.add(result.getString(4));
-              }     
-                table.addRow(getTable);
-            } 
+                table.addRow(new String[]{result.getString("teacher_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
+            }        
         } catch (SQLException ex) { // Exception for SQL
-            Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Database Offline!");
+            Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
         } catch (ClassNotFoundException ex) { //Exception for Class.forName()
             Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    // Check if the four textField is not Empty
+    public void checkTextField() {
+      if(!teacherID.getText().isEmpty() && !firstName.getText().isEmpty() && !lastName.getText().isEmpty() && !pass.getText().isEmpty()) {
+            btnAdd.setEnabled(true);
+            btnSave.setEnabled(true);
         }
     }
     
@@ -78,24 +78,41 @@ public class TeacherInfo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollTable = new javax.swing.JScrollPane();
         teacherTable = new javax.swing.JTable();
-        btnClose = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        btnClose1 = new javax.swing.JButton();
-        btnClose4 = new javax.swing.JButton();
-        btnClose6 = new javax.swing.JButton();
         searchLabel = new javax.swing.JLabel();
         searchBox = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        lastName = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        pass = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnAdd = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        teacherID = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        firstName = new javax.swing.JTextField();
+        closePanel = new javax.swing.JPanel();
+        btnClose = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         teacherTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "teacher_id", "first_name", "last_name", "password"
+                "Teacher ID", "First Name", "Last Name", "Password"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -107,7 +124,12 @@ public class TeacherInfo extends javax.swing.JFrame {
             }
         });
         teacherTable.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(teacherTable);
+        teacherTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                teacherTableMouseClicked(evt);
+            }
+        });
+        scrollTable.setViewportView(teacherTable);
         if (teacherTable.getColumnModel().getColumnCount() > 0) {
             teacherTable.getColumnModel().getColumn(0).setResizable(false);
             teacherTable.getColumnModel().getColumn(1).setResizable(false);
@@ -115,8 +137,88 @@ public class TeacherInfo extends javax.swing.JFrame {
             teacherTable.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        btnClose.setBackground(new java.awt.Color(255, 204, 204));
-        btnClose.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 42)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 255));
+        jLabel1.setText("Teacher Information");
+
+        searchLabel.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        searchLabel.setForeground(new java.awt.Color(102, 102, 255));
+        searchLabel.setText("Search");
+
+        searchBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                searchBoxKeyReleased(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setText("Last Name");
+
+        lastName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                lastNameKeyTyped(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(102, 102, 255));
+        jLabel2.setText("Add & Edit");
+
+        pass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                passKeyTyped(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Teacher ID:");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setText("Password");
+
+        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnClear.setText("Clear");
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        teacherID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                teacherIDKeyPressed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setText("First Name:");
+
+        firstName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                firstNameKeyTyped(evt);
+            }
+        });
+
+        closePanel.setBackground(new java.awt.Color(204, 204, 255));
+
+        btnClose.setBackground(new java.awt.Color(255, 153, 153));
+        btnClose.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnClose.setText("Close");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,95 +226,199 @@ public class TeacherInfo extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(102, 102, 255));
-        jLabel1.setText("Teacher Information");
+        javax.swing.GroupLayout closePanelLayout = new javax.swing.GroupLayout(closePanel);
+        closePanel.setLayout(closePanelLayout);
+        closePanelLayout.setHorizontalGroup(
+            closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, closePanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        closePanelLayout.setVerticalGroup(
+            closePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnClose, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+        );
 
-        btnClose1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnClose1.setText("Add");
-        btnClose1.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClose1ActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
 
-        btnClose4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnClose4.setText("Edit");
-        btnClose4.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClose4ActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
-
-        btnClose6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnClose6.setText("Update");
-        btnClose6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClose6ActionPerformed(evt);
-            }
-        });
-
-        searchLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        searchLabel.setText("Search");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(closePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(215, 215, 215))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(searchLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnClose)))
-                        .addGap(23, 23, 23))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnClose1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(102, 102, 102)
-                        .addComponent(btnClose4, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnClose6, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(55, 55, 55))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 31, Short.MAX_VALUE))
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(scrollTable, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(40, 40, 40)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(teacherID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(firstName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lastName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(pass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(40, 40, 40))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addGap(103, 103, 103))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchBox))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(teacherID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(firstName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lastName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnClose1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClose4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClose6, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29))
+                            .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(34, 34, 34)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(scrollTable))
+                .addGap(40, 40, 40))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+    // check if userID is not a number
+    if(!teacherID.getText().matches("[0-9]+")) {
+        JOptionPane.showMessageDialog(this, "Teacher ID must be a number!");
+    } else {   
+        try { // check if teacher ID already exists
+            String checkQuery = "SELECT * FROM teacher_info WHERE teacher_id = ?";
+            prestate = connect.prepareStatement(checkQuery);
+            prestate.setString(1, teacherID.getText());
+            result = prestate.executeQuery();
+            if(result.next()) {
+                JOptionPane.showMessageDialog(this, "Teacher ID already exists!", "Warning", JOptionPane.WARNING_MESSAGE);
+            } // add to databebase if teacherID is a number  
+            else {
+            String addTeacher = "INSERT into teacher_info (teacher_id, first_name, last_name, password) VALUES (?, ?, ?, ?)";
+            prestate = connect.prepareStatement(addTeacher);
+            
+            prestate.setString(1, teacherID.getText());
+            prestate.setString(2, firstName.getText());
+            prestate.setString(3, lastName.getText());
+            prestate.setString(4, pass.getText());
+            prestate.executeUpdate();         
+            // showMessageDialog
+            JOptionPane.showMessageDialog(this, "Added Successfully!");
+            //Clear all input
+            teacherID.setText("");
+            firstName.setText("");
+            lastName.setText("");
+            pass.setText("");
+            // disable add button
+            btnAdd.setEnabled(false);
+            // automatically update the table
+            table.setRowCount(0);
+            connectDB();                  
+            }
+        } catch (SQLException ex) { // Exception for SQL
+            Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } 
+      }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        //Clear all input
+        teacherID.setText("");
+        firstName.setText("");
+        lastName.setText("");
+        pass.setText("");
+        searchBox.setText("");
+        // automatically get table data
+        if(searchBox.getText().isEmpty()){
+            table.setRowCount(0);            
+            connectDB();
+        }  
+        // enable teacherID textfield
+        teacherID.setEnabled(true);
+        // disable buttons button
+        btnDelete.setEnabled(false);
+        btnSave.setEnabled(false);
+        btnAdd.setEnabled(false);
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // update table  
+        table.setRowCount(0);
+        connectDB();    
+        JOptionPane.showMessageDialog(this, "Table has been Updated!");
+        searchBox.setText("");
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         AdminUI admin = new AdminUI();
@@ -220,17 +426,143 @@ public class TeacherInfo extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void btnClose4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClose4ActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    try {
+        // Check if the teacher_id already exists in the database
+        String checkQuery = "SELECT * FROM teacher_info WHERE teacher_id = ?";
+        prestate = connect.prepareStatement(checkQuery);
+        prestate.setString(1, teacherID.getText());
+        result = prestate.executeQuery();
 
-    private void btnClose1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClose1ActionPerformed
+        if (result.next()) {
+            // teacher_id already exists, perform the update
+            String editTeacher = "UPDATE teacher_info SET first_name=?, last_name=?, password=? WHERE teacher_id=?";
+            prestate = connect.prepareStatement(editTeacher);
+            prestate.setString(1, firstName.getText());
+            prestate.setString(2, lastName.getText());
+            prestate.setString(3, pass.getText());
+            prestate.setString(4, teacherID.getText());
+            prestate.executeUpdate();
+            // showMessageDialog
+             JOptionPane.showMessageDialog(this, "Edit Successfully!");
+            // Clear all input
+            teacherID.setText("");
+            firstName.setText("");
+            lastName.setText("");
+            pass.setText("");
+            // disable save, add & delete button
+            btnSave.setEnabled(false);
+            btnAdd.setEnabled(false);
+            btnDelete.setEnabled(false);
+            // automatically update the table
+            table.setRowCount(0);
+            connectDB();
+        } 
+    } catch (SQLException ex) {
+         // Exception for SQL
+         Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
+         JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
+       }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void btnClose6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClose6ActionPerformed
+    private void teacherTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_teacherTableMouseClicked
+        int row = teacherTable.getSelectedRow();
+        table = (DefaultTableModel)teacherTable.getModel();
+        //get and display info in textbox
+        teacherID.setText(table.getValueAt(row, 0).toString());
+        firstName.setText(table.getValueAt(row, 1).toString());
+        lastName.setText(table.getValueAt(row, 2).toString());
+        pass.setText(table.getValueAt(row, 3).toString());
+        // enable save & clear button
+        btnSave.setEnabled(true);
+        btnDelete.setEnabled(true);
+        // disable teachID textfield & add button
+        btnAdd.setEnabled(false);
+        teacherID.setEnabled(false);
+    }//GEN-LAST:event_teacherTableMouseClicked
+
+    private void teacherIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_teacherIDKeyPressed
+        // disable save button
+        btnSave.setEnabled(false);
+        // Check if the four textField is not Empty
+        checkTextField();
+    }//GEN-LAST:event_teacherIDKeyPressed
+
+    private void firstNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_firstNameKeyTyped
+        // disable save button
+        btnSave.setEnabled(false);
+        // Check if the four textField is not Empty
+        checkTextField();
+    }//GEN-LAST:event_firstNameKeyTyped
+
+    private void lastNameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lastNameKeyTyped
+        // disable save button
+        btnSave.setEnabled(false);
+        // Check if the four textField is not Empty
+        checkTextField();
+    }//GEN-LAST:event_lastNameKeyTyped
+
+    private void passKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passKeyTyped
+        // disable save button
+        btnSave.setEnabled(false);
+        // Check if the four textField is not Empty
+        checkTextField();
+    }//GEN-LAST:event_passKeyTyped
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+       try {
+           int row = teacherTable.getSelectedRow();
+           String queryDelete = "DELETE FROM teacher_info WHERE teacher_id ="+ teacherTable.getModel().getValueAt(row, 0);
+           prestate = connect.prepareStatement(queryDelete);
+           prestate.executeUpdate();
+           // delete conformation
+           JOptionPane.showMessageDialog(this, "Delete Successfully!");
+           // disable delete & save button
+           btnDelete.setEnabled(false);
+           btnSave.setEnabled(false);
+           // enable teacherID textfield
+           teacherID.setEnabled(true);
+           // clear all four textfields
+           teacherID.setText("");
+           firstName.setText("");
+           lastName.setText("");
+           pass.setText("");    
+           // automatically update the table
+           table.setRowCount(0);
+           connectDB();
+       } catch (SQLException ex) { // Exception for SQL
+           Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
+           JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
+       } 
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // disable delete, Save and Add button when window is open
+        btnDelete.setEnabled(false);
+        btnSave.setEnabled(false);
+        btnAdd.setEnabled(false);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased
+        try {
+            String querySearch = "SELECT teacher_id, first_name, last_name, password FROM teacher_info WHERE teacher_id=? OR first_name=? OR last_name=? ";
+            prestate = connect.prepareStatement(querySearch);
+            prestate.setString(1, searchBox.getText());
+            prestate.setString(2, searchBox.getText());
+            prestate.setString(3, searchBox.getText());     
+            result = prestate.executeQuery();
+            table.setRowCount(0);
+            while(result.next()){
+                table.addRow(new String[]{result.getString("teacher_id"), result.getString("first_name"), result.getString("last_name"), result.getString("password")});
+            }            
+            // automatically get table data
+            if(searchBox.getText().isEmpty()) {
+                connectDB();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_searchBoxKeyReleased
 
     /**
      * @param args the command line arguments
@@ -258,6 +590,9 @@ public class TeacherInfo extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(TeacherInfo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -268,14 +603,26 @@ public class TeacherInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnClose1;
-    private javax.swing.JButton btnClose4;
-    private javax.swing.JButton btnClose6;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JPanel closePanel;
+    private javax.swing.JTextField firstName;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField lastName;
+    private javax.swing.JTextField pass;
+    private javax.swing.JScrollPane scrollTable;
     private javax.swing.JTextField searchBox;
     private javax.swing.JLabel searchLabel;
+    private javax.swing.JTextField teacherID;
     private javax.swing.JTable teacherTable;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import java.awt.event.*;
 import javax.swing.*;
 import java.sql.*;
 import java.util.logging.Level;
@@ -22,6 +23,8 @@ public class LoginUI extends javax.swing.JFrame {
     public LoginUI() throws ClassNotFoundException {
         initComponents();
         connectDB();
+        // lock window size
+        this.setResizable(false);        
     }
     
     final String url = "jdbc:mysql://localhost:3306/schooldb";
@@ -33,7 +36,8 @@ public class LoginUI extends javax.swing.JFrame {
     PreparedStatement prestate;
     Statement statement;
     ResultSet result;
-            
+    
+    // Connect to database
     public void connectDB() throws ClassNotFoundException {
         try { 
             Class.forName(sqlDriver);
@@ -47,7 +51,65 @@ public class LoginUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Database Offline!");
         }
     }
-
+    
+    // LogIn() Method
+    public void LogIn() {
+        //If userID and Password is Empty
+        if (userID.getText().equals("") && password.getText().equals("") ) {
+            JOptionPane.showMessageDialog(null, "User ID and Password are Required!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } // if userID is Empty
+        else if (userID.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "User ID Required!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } // if Password is Empty
+        else if (password.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Password Required!", "Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try { // if Admin
+                String queryLogin = "SELECT * FROM admin_info WHERE admin_id = ? AND password = ?";
+                prestate = connect.prepareStatement(queryLogin);
+                prestate.setString(1, userID.getText());
+                prestate.setString(2, password.getText());
+                result = prestate.executeQuery();
+                if (result.next()) {
+                    JOptionPane.showMessageDialog(null, "Login Successfully!");
+                    AdminUI admin = new AdminUI();
+                    admin.setVisible(true);
+                    this.dispose();
+                } else {   // if Teacher
+                    queryLogin = "SELECT * FROM teacher_info WHERE teacher_id = ? AND password = ?";
+                    prestate = connect.prepareStatement(queryLogin);
+                    prestate.setString(1, userID.getText());
+                    prestate.setString(2, password.getText());
+                    result = prestate.executeQuery();
+                    if (result.next()) {
+                        JOptionPane.showMessageDialog(null, "Login Successfully!");
+                        TeacherUI teacher = new TeacherUI();
+                        teacher.setVisible(true);
+                        this.dispose();
+                    } else {  // if Student
+                        queryLogin = "SELECT * FROM student_info WHERE student_id = ? AND password = ?";
+                        prestate = connect.prepareStatement(queryLogin);
+                        prestate.setString(1, userID.getText());
+                        prestate.setString(2, password.getText());
+                        result = prestate.executeQuery();
+                        if (result.next()) {
+                            JOptionPane.showMessageDialog(null, "Login Successfully!");
+                            StudentUI student = new StudentUI(userID.getText());
+                            student.setVisible(true);
+                            this.dispose();
+                        } else { // if user ID and Password does not match in the database
+                            JOptionPane.showMessageDialog(null, "Invalid User ID or Password!", "Warning", JOptionPane.WARNING_MESSAGE);
+                            userID.setText("");
+                            password.setText("");
+                        }
+                    }
+                }
+            }  catch (SQLException ex) { // Exception for SQL
+                Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,7 +133,6 @@ public class LoginUI extends javax.swing.JFrame {
         showPassword = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(727, 507));
 
         leftPanel.setBackground(new java.awt.Color(204, 204, 255));
 
@@ -119,13 +180,25 @@ public class LoginUI extends javax.swing.JFrame {
         welcome.setForeground(new java.awt.Color(102, 102, 255));
         welcome.setText("Welcome!");
 
-        labeluserID.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        labeluserID.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         labeluserID.setText("User ID:");
 
-        labelPassword.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
+        userID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                userIDKeyPressed(evt);
+            }
+        });
+
+        labelPassword.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         labelPassword.setText("Password:");
 
-        btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordKeyPressed(evt);
+            }
+        });
+
+        btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,7 +206,7 @@ public class LoginUI extends javax.swing.JFrame {
             }
         });
 
-        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnClear.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         btnClear.setText("Clear");
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,7 +214,7 @@ public class LoginUI extends javax.swing.JFrame {
             }
         });
 
-        showPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        showPassword.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         showPassword.setText("Show Password");
         showPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,35 +228,36 @@ public class LoginUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(leftPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(labelPassword)
-                        .addComponent(showPassword)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(labeluserID, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(userID, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(password, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(welcome)
-                        .addGap(48, 48, 48)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelPassword)
+                            .addComponent(showPassword)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(labeluserID, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(userID, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                                .addComponent(password, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(welcome)))
                 .addGap(0, 47, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
+                .addGap(54, 54, 54)
                 .addComponent(welcome)
-                .addGap(30, 30, 30)
+                .addGap(28, 28, 28)
                 .addComponent(labeluserID)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(userID, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(labelPassword)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -191,9 +265,9 @@ public class LoginUI extends javax.swing.JFrame {
                 .addComponent(showPassword)
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(74, Short.MAX_VALUE))
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
@@ -201,61 +275,8 @@ public class LoginUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-
-        //If userID and Password is Empty
-        if (userID.getText().equals("") && password.getText().equals("") ) {
-            JOptionPane.showMessageDialog(null, "User ID and Password are Required!");
-        } // if userID is Empty
-        else if (userID.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "User ID Required!");
-        } // if Password is Empty
-        else if (password.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "Password Required!");
-        } else {
-            try { // if Admin
-                String queryLogin = "SELECT * FROM admin_info WHERE admin_id = ? AND password = ?";
-                prestate = connect.prepareStatement(queryLogin);
-                prestate.setString(1, userID.getText());
-                prestate.setString(2, password.getText());
-                result = prestate.executeQuery();
-                if (result.next()) {
-                    JOptionPane.showMessageDialog(null, "Login Successfully!");
-                    AdminUI admin = new AdminUI();
-                    admin.setVisible(true);
-                    this.dispose();
-                } else {   // if Teacher
-                    queryLogin = "SELECT * FROM teacher_info WHERE teacher_id = ? AND password = ?";
-                    prestate = connect.prepareStatement(queryLogin);
-                    prestate.setString(1, userID.getText());
-                    prestate.setString(2, password.getText());
-                    result = prestate.executeQuery();
-                    if (result.next()) {
-                        JOptionPane.showMessageDialog(null, "Login Successfully!");
-                        TeacherUI teacher = new TeacherUI();
-                        teacher.setVisible(true);
-                        this.dispose();
-                    } else {  // if Student
-                        queryLogin = "SELECT * FROM student_info WHERE student_id = ? AND password = ?";
-                        prestate = connect.prepareStatement(queryLogin);
-                        prestate.setString(1, userID.getText());
-                        prestate.setString(2, password.getText());
-                        result = prestate.executeQuery();
-                        if (result.next()) {
-                            JOptionPane.showMessageDialog(null, "Login Successfully!");
-                            StudentUI student = new StudentUI();
-                            student.setVisible(true);
-                            this.dispose();
-                        } else { // if user ID and Password does not match in the database
-                            JOptionPane.showMessageDialog(null, "Invalid User ID or Password!");
-                            userID.setText("");
-                            password.setText("");
-                        }
-                    }
-                }
-            }  catch (SQLException ex) { // Exception for SQL
-                Logger.getLogger(LoginUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        // run login method    
+        LogIn();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -272,6 +293,20 @@ public class LoginUI extends javax.swing.JFrame {
             password.setEchoChar('*');
         }
     }//GEN-LAST:event_showPasswordActionPerformed
+
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        // if enter key is press run logIn() method
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+           LogIn();
+        }    
+    }//GEN-LAST:event_passwordKeyPressed
+
+    private void userIDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userIDKeyPressed
+        // if enter key is press move inpunt to password    
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+           password.requestFocus();
+        }    
+    }//GEN-LAST:event_userIDKeyPressed
 
     /**
      * @param args the command line arguments
