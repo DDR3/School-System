@@ -207,9 +207,12 @@ public class SearchStudent extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        int close = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Close", JOptionPane.OK_CANCEL_OPTION);
+        if(close == JOptionPane.OK_OPTION) {
         TeacherUI teacher = new TeacherUI();
         teacher.setVisible(true);
         this.dispose();
+        }
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased

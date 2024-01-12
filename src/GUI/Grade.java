@@ -368,6 +368,8 @@ public class Grade extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+   int add = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Add", JOptionPane.YES_NO_OPTION);
+   if(add == JOptionPane.YES_OPTION) {    
     // check if userID is not a number
     if(!gradeID.getText().matches("[0-9]+")) {
         JOptionPane.showMessageDialog(this, "Grade ID must be a number!");
@@ -408,6 +410,7 @@ public class Grade extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
         } 
       }
+     }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -443,13 +446,18 @@ public class Grade extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        AdminUI admin = new AdminUI();
-        admin.setVisible(true);
-        this.dispose();
+   int close = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Close", JOptionPane.OK_CANCEL_OPTION);
+   if(close == JOptionPane.YES_OPTION) {         
+       AdminUI admin = new AdminUI();
+       admin.setVisible(true);
+       this.dispose();
+   } 
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-    try {
+   int save = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Edit", JOptionPane.YES_NO_OPTION);
+   if(save == JOptionPane.YES_OPTION) { 
+      try {
         // Check if the teacher_id already exists in the database
         String checkQuery = "SELECT * FROM grades WHERE grade_id = ?";
         prestate = connect.prepareStatement(checkQuery);
@@ -487,11 +495,12 @@ public class Grade extends javax.swing.JFrame {
             table.setRowCount(0);
             connectDB();
         } 
-    } catch (SQLException ex) {
+       } catch (SQLException ex) {
          // Exception for SQL
          Logger.getLogger(Grade.class.getName()).log(Level.SEVERE, null, ex);
          JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        }
+     } 
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void gradeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradeTableMouseClicked
@@ -543,7 +552,9 @@ public class Grade extends javax.swing.JFrame {
     }//GEN-LAST:event_subjectIDKeyTyped
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-       try {
+     int delete = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+     if(delete == JOptionPane.YES_OPTION) { 
+         try {
            int row = gradeTable.getSelectedRow();
            String queryDelete = "DELETE FROM grades WHERE grade_id = '" + gradeTable.getModel().getValueAt(row, 0) + "'";
            prestate = connect.prepareStatement(queryDelete);
@@ -571,6 +582,7 @@ public class Grade extends javax.swing.JFrame {
            Logger.getLogger(Grade.class.getName()).log(Level.SEVERE, null, ex);
            JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        } 
+     }   
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

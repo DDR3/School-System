@@ -192,8 +192,8 @@ public class TeacherInfo extends javax.swing.JFrame {
             }
         });
 
-        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnUpdate.setText("Update");
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnUpdate.setText("Update Table");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -271,9 +271,9 @@ public class TeacherInfo extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(scrollTable, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -310,7 +310,7 @@ public class TeacherInfo extends javax.swing.JFrame {
                 .addComponent(closePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -351,7 +351,9 @@ public class TeacherInfo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-    // check if userID is not a number
+   int add = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Add", JOptionPane.YES_NO_OPTION);
+   if(add == JOptionPane.YES_OPTION) {    
+    // check if userID is a number
     if(!teacherID.getText().matches("[0-9]+")) {
         JOptionPane.showMessageDialog(this, "Teacher ID must be a number!");
     } else {   
@@ -381,6 +383,7 @@ public class TeacherInfo extends javax.swing.JFrame {
             pass.setText("");
             // disable add button
             btnAdd.setEnabled(false);
+            btnSave.setEnabled(false);
             // automatically update the table
             table.setRowCount(0);
             connectDB();                  
@@ -390,6 +393,7 @@ public class TeacherInfo extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
         } 
       }
+     }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -421,13 +425,18 @@ public class TeacherInfo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        int close = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Close", JOptionPane.OK_CANCEL_OPTION);
+        if(close == JOptionPane.OK_OPTION) {
         AdminUI admin = new AdminUI();
         admin.setVisible(true);
         this.dispose();
+        }
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-    try {
+   int save = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Edit", JOptionPane.YES_NO_OPTION);
+   if(save == JOptionPane.YES_OPTION) { 
+     try {
         // Check if the teacher_id already exists in the database
         String checkQuery = "SELECT * FROM teacher_info WHERE teacher_id = ?";
         prestate = connect.prepareStatement(checkQuery);
@@ -445,24 +454,28 @@ public class TeacherInfo extends javax.swing.JFrame {
             prestate.executeUpdate();
             // showMessageDialog
              JOptionPane.showMessageDialog(this, "Edit Successfully!");
-            // Clear all input
-            teacherID.setText("");
-            firstName.setText("");
-            lastName.setText("");
-            pass.setText("");
-            // disable save, add & delete button
-            btnSave.setEnabled(false);
-            btnAdd.setEnabled(false);
-            btnDelete.setEnabled(false);
-            // automatically update the table
-            table.setRowCount(0);
-            connectDB();
+           // disable delete & save button
+           btnDelete.setEnabled(false);
+           btnSave.setEnabled(false);
+           btnAdd.setEnabled(false);
+           // enable teacherID textfield
+           teacherID.setEnabled(true);
+           // clear textfields
+           teacherID.setText("");
+           firstName.setText("");
+           lastName.setText("");
+           pass.setText("");    
+           searchBox.setText("");
+           // automatically update the table
+           table.setRowCount(0);
+           connectDB();
         } 
     } catch (SQLException ex) {
          // Exception for SQL
          Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
          JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        }
+    }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void teacherTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_teacherTableMouseClicked
@@ -510,7 +523,9 @@ public class TeacherInfo extends javax.swing.JFrame {
     }//GEN-LAST:event_passKeyTyped
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-       try {
+     int delete = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+     if(delete == JOptionPane.YES_OPTION) { 
+        try {
            int row = teacherTable.getSelectedRow();
            String queryDelete = "DELETE FROM teacher_info WHERE teacher_id ="+ teacherTable.getModel().getValueAt(row, 0);
            prestate = connect.prepareStatement(queryDelete);
@@ -527,13 +542,15 @@ public class TeacherInfo extends javax.swing.JFrame {
            firstName.setText("");
            lastName.setText("");
            pass.setText("");    
-           // automatically update the table
+           searchBox.setText("");
+           // get latest table data
            table.setRowCount(0);
            connectDB();
        } catch (SQLException ex) { // Exception for SQL
            Logger.getLogger(TeacherInfo.class.getName()).log(Level.SEVERE, null, ex);
            JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        } 
+     }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

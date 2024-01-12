@@ -39,7 +39,6 @@ public class AdminUI extends javax.swing.JFrame {
         btnStudentInfo = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnLogout = new javax.swing.JButton();
-        btnAdmin = new javax.swing.JButton();
         btnGrade = new javax.swing.JButton();
         btnSubject = new javax.swing.JButton();
 
@@ -89,14 +88,6 @@ public class AdminUI extends javax.swing.JFrame {
             .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
         );
 
-        btnAdmin.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        btnAdmin.setText("Admin Information");
-        btnAdmin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdminActionPerformed(evt);
-            }
-        });
-
         btnGrade.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnGrade.setText("Grade Management");
         btnGrade.addActionListener(new java.awt.event.ActionListener() {
@@ -105,7 +96,7 @@ public class AdminUI extends javax.swing.JFrame {
             }
         });
 
-        btnSubject.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        btnSubject.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
         btnSubject.setText("Subject Management");
         btnSubject.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,7 +119,6 @@ public class AdminUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnTeacherInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnStudentInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGrade, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSubject, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(116, 116, 116))))
@@ -139,8 +129,6 @@ public class AdminUI extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
                 .addComponent(jLabel1)
-                .addGap(25, 25, 25)
-                .addComponent(btnAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addComponent(btnTeacherInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
@@ -184,14 +172,6 @@ public class AdminUI extends javax.swing.JFrame {
                  }
              }
     }//GEN-LAST:event_btnLogoutActionPerformed
-
-    private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
-          // show StudentInfo UI
-          AdminInfo adminInfo = new AdminInfo();
-          adminInfo.setVisible(true);
-          // remove AdminUI
-          this.dispose();
-    }//GEN-LAST:event_btnAdminActionPerformed
 
     private void btnGradeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGradeActionPerformed
         // show grade management UI
@@ -245,7 +225,6 @@ public class AdminUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdmin;
     private javax.swing.JButton btnGrade;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnStudentInfo;

@@ -33,9 +33,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="searchLabel" min="-2" pref="84" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="searchBox" min="-2" pref="270" max="-2" attributes="0"/>
+                      <Component id="searchBox" min="-2" pref="242" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnUpdate" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="btnUpdate" min="-2" pref="129" max="-2" attributes="0"/>
                   </Group>
                   <Component id="scrollTable" min="-2" pref="480" max="-2" attributes="0"/>
               </Group>
@@ -288,9 +288,9 @@
     <Component class="javax.swing.JButton" name="btnUpdate">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="16" style="1"/>
+          <Font name="Segoe UI" size="15" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Update"/>
+        <Property name="text" type="java.lang.String" value="Update Table"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateActionPerformed"/>

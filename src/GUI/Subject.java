@@ -188,8 +188,8 @@ public class Subject extends javax.swing.JFrame {
             }
         });
 
-        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnUpdate.setText("Update");
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnUpdate.setText("Update Table");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -283,9 +283,9 @@ public class Subject extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(scrollTable, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -393,6 +393,8 @@ public class Subject extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+     int add = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Add", JOptionPane.YES_NO_OPTION);
+     if(add == JOptionPane.YES_OPTION) {
         try { // check if subject ID already exists
             String checkQuery = "SELECT * FROM subjects WHERE subject_id = ?";
             prestate = connect.prepareStatement(checkQuery);
@@ -422,6 +424,10 @@ public class Subject extends javax.swing.JFrame {
             Logger.getLogger(Subject.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
         } 
+     } else { 
+         subjectID.setText("");
+         subjectName.setText("");
+     }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -450,13 +456,18 @@ public class Subject extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        int close = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Close", JOptionPane.OK_CANCEL_OPTION);
+        if(close == JOptionPane.OK_OPTION) {
         AdminUI admin = new AdminUI();
         admin.setVisible(true);
         this.dispose();
+        }
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-    try {
+     int save = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Edit", JOptionPane.YES_NO_OPTION);
+     if(save == JOptionPane.YES_OPTION) { 
+        try {
         // Check if the subject_id already exists in the database
         String checkQuery = "SELECT * FROM subjects WHERE subject_id = ?";
         prestate = connect.prepareStatement(checkQuery);
@@ -488,6 +499,7 @@ public class Subject extends javax.swing.JFrame {
          Logger.getLogger(Subject.class.getName()).log(Level.SEVERE, null, ex);
          JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        }
+     }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void subjectTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_subjectTableMouseClicked
@@ -519,7 +531,9 @@ public class Subject extends javax.swing.JFrame {
     }//GEN-LAST:event_subjectNameKeyTyped
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-       try {
+     int delete = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+     if(delete == JOptionPane.YES_OPTION) { 
+        try {
            int row = subjectTable.getSelectedRow();
            String queryDelete = "DELETE FROM subjects WHERE subject_id = '" + subjectTable.getModel().getValueAt(row, 0) + "'";
            prestate = connect.prepareStatement(queryDelete);
@@ -541,6 +555,7 @@ public class Subject extends javax.swing.JFrame {
            Logger.getLogger(Subject.class.getName()).log(Level.SEVERE, null, ex);
            JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        } 
+     }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

@@ -310,9 +310,6 @@ public class TeacherGrade extends javax.swing.JFrame {
             table.setRowCount(0);            
             connectDB();
         }     
-        // enable teacherID textfield
-        studentID.setEnabled(true);
-        subjectID.setEnabled(true);
         // disable delete, Save and Add button
         btnSave.setEnabled(false);
     }//GEN-LAST:event_btnClearActionPerformed
@@ -326,13 +323,18 @@ public class TeacherGrade extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        TeacherUI teacher = new TeacherUI();
-        teacher.setVisible(true);
-        this.dispose();
+        int close = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Close", JOptionPane.OK_CANCEL_OPTION);
+        if(close == JOptionPane.OK_OPTION) {
+          TeacherUI teacher = new TeacherUI();
+          teacher.setVisible(true);
+          this.dispose();
+        }
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-    try {
+    int save = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Edit", JOptionPane.YES_NO_OPTION);
+    if(save == JOptionPane.YES_OPTION) { 
+        try {
         // Check if the student_id already exists in the database
         String checkQuery = "SELECT * FROM grades WHERE student_id = ?";
         prestate = connect.prepareStatement(checkQuery);
@@ -352,10 +354,7 @@ public class TeacherGrade extends javax.swing.JFrame {
             studentID.setText("");
             subjectID.setText("");
             grade.setText("");
-            //enable button
-            studentID.setEnabled(true);
-            subjectID.setEnabled(true);
-            // disable save, add & delete button
+            // disable save button
             btnSave.setEnabled(false);
             // automatically update the table
             table.setRowCount(0);
@@ -366,6 +365,7 @@ public class TeacherGrade extends javax.swing.JFrame {
          Logger.getLogger(TeacherGrade.class.getName()).log(Level.SEVERE, null, ex);
          JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        }
+     }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void gradeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gradeTableMouseClicked
@@ -399,6 +399,8 @@ public class TeacherGrade extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // disable Save button when window is open
         btnSave.setEnabled(false);
+        subjectID.setEnabled(false);
+        studentID.setEnabled(false);
     }//GEN-LAST:event_formWindowOpened
 
     private void searchBoxKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchBoxKeyReleased

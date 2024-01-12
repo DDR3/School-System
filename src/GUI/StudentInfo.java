@@ -195,8 +195,8 @@ public class StudentInfo extends javax.swing.JFrame {
             }
         });
 
-        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        btnUpdate.setText("Update");
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        btnUpdate.setText("Update Table");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
@@ -279,13 +279,13 @@ public class StudentInfo extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(215, 215, 215))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(searchBox, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(scrollTable, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -369,9 +369,11 @@ public class StudentInfo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-    // check if userID is not a number
+   int add = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Add", JOptionPane.YES_NO_OPTION);
+   if(add == JOptionPane.YES_OPTION) {    
+    // check if userID is a number
     if(!studentID.getText().matches("[0-9]+")) {
-        JOptionPane.showMessageDialog(this, "Student ID must be a number!");
+        JOptionPane.showMessageDialog(this, "Student ID must be a number!", "Warning", JOptionPane.WARNING_MESSAGE);
     } else {   
         try { // check if student ID already exists
             String checkQuery = "SELECT * FROM student_info WHERE student_id = ?";
@@ -382,13 +384,14 @@ public class StudentInfo extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Student ID already exists!", "Warning", JOptionPane.WARNING_MESSAGE);
             } // add to databebase if studentID is a number  
             else {
-            String addStudent = "INSERT into student_info (student_id, first_name, last_name, password) VALUES (?, ?, ?, ?)";
+            String addStudent = "INSERT into student_info (student_id, first_name, last_name, section, password) VALUES (?, ?, ?, ?, ?)";
             prestate = connect.prepareStatement(addStudent);
             
             prestate.setString(1, studentID.getText());
             prestate.setString(2, firstName.getText());
             prestate.setString(3, lastName.getText());
-            prestate.setString(4, pass.getText());
+            prestate.setString(4, section.getText());
+            prestate.setString(5, pass.getText());
             prestate.executeUpdate();         
             // showMessageDialog
             JOptionPane.showMessageDialog(this, "Added Successfully!");
@@ -396,6 +399,7 @@ public class StudentInfo extends javax.swing.JFrame {
             studentID.setText("");
             firstName.setText("");
             lastName.setText("");
+            section.setText("");
             pass.setText("");
             // disable add button
             btnAdd.setEnabled(false);
@@ -407,7 +411,8 @@ public class StudentInfo extends javax.swing.JFrame {
             Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
         } 
-      }
+       }
+     } 
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -440,13 +445,18 @@ public class StudentInfo extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        int close = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Close", JOptionPane.OK_CANCEL_OPTION);
+        if(close == JOptionPane.OK_OPTION) {
         AdminUI admin = new AdminUI();
         admin.setVisible(true);
         this.dispose();
+        }
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-    try {
+     int save = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Edit", JOptionPane.YES_NO_OPTION);
+     if(save == JOptionPane.YES_OPTION) { 
+        try {
         // Check if the student_id already exists in the database
         String checkQuery = "SELECT * FROM student_info WHERE student_id = ?";
         prestate = connect.prepareStatement(checkQuery);
@@ -469,12 +479,16 @@ public class StudentInfo extends javax.swing.JFrame {
             studentID.setText("");
             firstName.setText("");
             lastName.setText("");
+            section.setText("");
             pass.setText("");
-            // disable save, add & delete button
+            searchBox.setText("");
+            // enable buttons
+            studentID.setEnabled(true);
+            // disable buttons
             btnSave.setEnabled(false);
             btnAdd.setEnabled(false);
             btnDelete.setEnabled(false);
-            // automatically update the table
+            // get table data
             table.setRowCount(0);
             connectDB();
         } 
@@ -483,6 +497,7 @@ public class StudentInfo extends javax.swing.JFrame {
          Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
          JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        }
+     } 
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void studentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studentTableMouseClicked
@@ -531,7 +546,9 @@ public class StudentInfo extends javax.swing.JFrame {
     }//GEN-LAST:event_passKeyTyped
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-       try {
+     int delete = JOptionPane.showConfirmDialog(this, "Are you sure?", "Confirm Delete", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+     if(delete == JOptionPane.YES_OPTION) { 
+        try {
            int row = studentTable.getSelectedRow();
            String queryDelete = "DELETE FROM student_info WHERE student_id ="+ studentTable.getModel().getValueAt(row, 0);
            prestate = connect.prepareStatement(queryDelete);
@@ -547,14 +564,17 @@ public class StudentInfo extends javax.swing.JFrame {
            studentID.setText("");
            firstName.setText("");
            lastName.setText("");
+           section.setText("");
            pass.setText("");    
-           // automatically update the table
+           searchBox.setText("");
+           // get latest table data
            table.setRowCount(0);
            connectDB();
        } catch (SQLException ex) { // Exception for SQL
            Logger.getLogger(StudentInfo.class.getName()).log(Level.SEVERE, null, ex);
            JOptionPane.showMessageDialog(null, "Database Offline!", "Warning", JOptionPane.WARNING_MESSAGE);
        } 
+     }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
